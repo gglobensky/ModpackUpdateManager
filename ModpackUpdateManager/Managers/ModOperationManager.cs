@@ -15,14 +15,19 @@ namespace ModpackUpdateManager.Managers
         private ModDataAccessor modDataAccessor;
         private Automation automation;
 
-        private const string MissingModTomlFileContentName = @"missing.log";
-        private const string ManuallyAddedModTomlFileContentName = @"manuallyAdded.log";
-        private const string invalidDownloadsFolderName = @"invalid";
+        private const string logFolderName = "logs";
+        private const string executionLogFileName = "execution.log";
+        private const string missingModFileName = "missing.log";
+        private const string dependenciesLogFileName = "dependencies.log";
+        private const string manuallyAddedModFileName = "manuallyAdded.log";
+        private const string invalidDownloadsFolderName = "invalid";
 
-        private string missingModPath = Path.Combine(Path.GetFullPath(PersistentVariables.GetOutputModPath()), MissingModTomlFileContentName);
-        private string manuallyAddedModPath = Path.Combine(Path.GetFullPath(PersistentVariables.GetOutputModPath()), ManuallyAddedModTomlFileContentName);
+        private string missingModPath = Path.Combine(Path.GetFullPath(PersistentVariables.GetOutputModPath()), logFolderName, missingModFileName);
+        private string dependenciesModPath = Path.Combine(Path.GetFullPath(PersistentVariables.GetOutputModPath()), logFolderName, dependenciesLogFileName);
+        private string manuallyAddedModPath = Path.Combine(Path.GetFullPath(PersistentVariables.GetOutputModPath()), logFolderName, manuallyAddedModFileName);
+        private string executionLogFullPath = Path.Combine(Path.GetFullPath(PersistentVariables.GetOutputModPath()), logFolderName, executionLogFileName);
 
-        private static string lastProcessedModTomlFileContentName;
+        private static string lastProcessedModFileName;
 
         private Dictionary<string, string> gameVersionIds = new Dictionary<string, string>();
         private Dictionary<string, string> gameFlavorIds = new Dictionary<string, string>();
@@ -33,8 +38,8 @@ namespace ModpackUpdateManager.Managers
         {
             gameFlavorIds = _gameFlavorIds;
             gameVersionIds = _gameVersionIds;
-
-            LogFile.Initialize();
+            Directory.CreateDirectory(Path.Combine(Path.GetFullPath(PersistentVariables.GetOutputModPath()), logFolderName));
+            LogFile.Initialize(executionLogFullPath);
             PersistentVariables.SetCurrentModListIndex(0);
             PersistentVariables.SetIsInAutoMode(false);
             userMessaging = new UserMessaging(MainForm);
@@ -85,9 +90,9 @@ namespace ModpackUpdateManager.Managers
 
             ModDataApiResponse modDataApiResponse = JsonConvert.DeserializeObject<ModDataApiResponse>(BrowserManager.GetRequest(ModDataUrl));
 
-            string ModTomlFileContentName = modDataApiResponse.data.Count > 0 ? modDataApiResponse.data[0].fileName : "";
+            string ModFileName = modDataApiResponse.data.Count > 0 ? modDataApiResponse.data[0].fileName : "";
 
-            if (String.IsNullOrEmpty(ModTomlFileContentName))
+            if (String.IsNullOrEmpty(ModFileName))
             {
                 string response = JsonConvert.SerializeObject(modDataApiResponse);
                 string downloadFileNotFoundMessage = $"Could not find file for mod {modDataAccessor.GetCurrentlyProcessedModData().displayName} available for this Minecraft version";
@@ -101,9 +106,9 @@ namespace ModpackUpdateManager.Managers
                 return 1;
             }
 
-            SetLastProcessedModTomlFileContentName(ModTomlFileContentName);
+            SetLastProcessedModFileName(ModFileName);
             userMessaging.ShowMessage($"Successfully found mod file to download for mod {modDataAccessor.GetCurrentlyProcessedModData().displayName}");
-            userMessaging.ShowMessage($"Downloading File {ModTomlFileContentName}...");
+            userMessaging.ShowMessage($"Downloading File {ModFileName}...");
             await BrowserManager.LoadUrl(string.Format(AppSettings.GetDownloadUrl(), baseModAddress, modDataApiResponse.data[0].id));
 
             return 0;
@@ -198,15 +203,15 @@ namespace ModpackUpdateManager.Managers
 
         private void OnDownloadUpdated(CefSharp.DownloadItem downloadItem)
         {
-            if (downloadItem.IsComplete && lastProcessedModTomlFileContentName != null && System.IO.Path.GetFileName(downloadItem.FullPath) == Utilities.FastReplace(lastProcessedModTomlFileContentName, " ", "+"))
+            if (downloadItem.IsComplete && lastProcessedModFileName != null && System.IO.Path.GetFileName(downloadItem.FullPath) == Utilities.FastReplace(lastProcessedModFileName, " ", "+"))
             {
-                OnModTomlFileContentDownloadCompleted(System.IO.Path.GetFileName(downloadItem.FullPath)).Wait();
+                OnModFileDownloadCompleted(System.IO.Path.GetFileName(downloadItem.FullPath)).Wait();
             }
             else if (downloadItem.IsComplete)
             {
                 //Manually added
                 OnOtherDownloadCompleted(System.IO.Path.GetFileName(downloadItem.FullPath));
-                LogFile.LogMessage($"{System.IO.Path.GetFileName(downloadItem.FullPath)} == {lastProcessedModTomlFileContentName}");
+                LogFile.LogMessage($"{System.IO.Path.GetFileName(downloadItem.FullPath)} == {lastProcessedModFileName}");
             }
             else
             {
@@ -222,6 +227,11 @@ namespace ModpackUpdateManager.Managers
         private void SaveToJson(string path, string name, string reason, bool appendToFile = true)
         {
             JsonFileHandler.WriteJsonToFile<LogObject>(path, new LogObject(name, reason), appendToFile);
+        }
+
+        private void SaveToJson(string path, string name, bool appendToFile)
+        {
+            JsonFileHandler.WriteJsonToFile<string>(path, name, appendToFile);
         }
 
         private void ShowSearchingUserMessage()
@@ -271,13 +281,13 @@ namespace ModpackUpdateManager.Managers
 
         private void FinalizeUpdateProcess()
         {
-            HashSet<string> missingDependencies = modDataAccessor.GetOutputMissingDependencies();
+            HashSet<string> missingDependencies = modDataAccessor.GetAllOutputDependencies();
             int len = missingDependencies.Count;
 
             foreach (string dependency in missingDependencies)
             {
-                userMessaging.ShowMessage($"Warning, dependency {dependency} not found in output file. Please download manually.");
-                SaveToJson(missingModPath, dependency, "Missing dependency, no displayName is available for dependencies in mods.toml. Cannot download automatically.");
+                userMessaging.ShowMessage($"Dependency {dependency} required for modpack, please confirm presence manually.");
+                SaveToJson(dependenciesModPath, dependency, true);
             }
         }
 
@@ -297,7 +307,7 @@ namespace ModpackUpdateManager.Managers
             userMessaging.ShowMessage($"Warning: Could not file mods.toml file in {filePath}");
         }
 
-        private async Task OnModTomlFileContentDownloadCompleted(string fileName)
+        private async Task OnModFileDownloadCompleted(string fileName)
         {
             userMessaging.ShowMessage($"File {fileName} downloaded successfully...");
             await FinalizeDownload(fileName);
@@ -335,9 +345,9 @@ namespace ModpackUpdateManager.Managers
 
             return null;
         }
-        private static void SetLastProcessedModTomlFileContentName(string _lastProcessedModTomlFileContentName)
+        private static void SetLastProcessedModFileName(string _lastProcessedModFileName)
         {
-            lastProcessedModTomlFileContentName = _lastProcessedModTomlFileContentName;
+            lastProcessedModFileName = _lastProcessedModFileName;
         }
     }
 }

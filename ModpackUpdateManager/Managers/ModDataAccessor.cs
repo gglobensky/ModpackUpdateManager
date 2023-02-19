@@ -21,17 +21,17 @@ namespace ModpackUpdateManager.Managers
             return sourceFolderModData.Count;
         }
 
-        public ModDataAccessor(Dictionary<string, string> gameFlavorIds, List<string> _searchTermBlacklist, Action<string> onSourceModTomlFileContentNotFound, Action onSkippingExisting)
+        public ModDataAccessor(Dictionary<string, string> gameFlavorIds, List<string> _searchTermBlacklist, Action<string> onSourceModFileNotFound, Action onSkippingExisting)
         {
             InitializeData(gameFlavorIds);
             searchTermBlacklist = _searchTermBlacklist;
-            sourceFolderModData = GetAllModData(sourceModFolderPath, onSourceModTomlFileContentNotFound);
+            sourceFolderModData = GetAllModData(sourceModFolderPath, onSourceModFileNotFound);
 
             SkipExisting(onSkippingExisting);
         }
         public List<ModData> GetAllModData(string path, Action<string> onModTomlFileNotFound)
         {
-            List<ModData> ModTomlFileContentDatum = new List<ModData>();
+            List<ModData> ModFileDatum = new List<ModData>();
             string[] jarFiles = Directory.GetFiles(path, "*.jar")
                          .Select(Path.GetFileName)
                          .ToArray();
@@ -46,11 +46,11 @@ namespace ModpackUpdateManager.Managers
                 }
                 else
                 {
-                    ModTomlFileContentDatum.Add(ModData);
+                    ModFileDatum.Add(ModData);
                 }
             }
 
-            return ModTomlFileContentDatum;
+            return ModFileDatum;
         }
 
         public ModData GetModData(string path, string fileName)
@@ -140,11 +140,11 @@ namespace ModpackUpdateManager.Managers
 
             return dependencyModIds;
         }
-        public HashSet<string> GetOutputMissingDependencies()
+        public HashSet<string> GetAllOutputDependencies()
         {
             string modFolderPath = PersistentVariables.GetOutputModPath();
 
-            List<ModData> ModTomlFileContentDatum = new List<ModData>();
+            List<ModData> ModFileDatum = new List<ModData>();
             string[] jarFiles = Directory.GetFiles(modFolderPath, "*.jar")
                          .Select(Path.GetFileName)
                          .ToArray();
@@ -165,6 +165,11 @@ namespace ModpackUpdateManager.Managers
 
         private void SkipExisting(Action onSkipExisting)
         {
+            if (!Directory.Exists(outputModFolderPath))
+            {
+                return;
+            }
+
             int sourceModCount = sourceFolderModData.Count;
 
             if (PersistentVariables.GetSkipExisting())

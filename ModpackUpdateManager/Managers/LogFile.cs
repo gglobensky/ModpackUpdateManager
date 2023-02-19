@@ -4,9 +4,11 @@ namespace ModpackUpdateManager.Managers
 {
     public static class LogFile
     {
-        private static string logFilePath = @".\\logs.log";
-        public static void Initialize(bool clearLogFile = true)
+        private static string logFilePath;
+        public static void Initialize(string _logFilePath, bool clearLogFile = true)
         {
+            logFilePath = _logFilePath;
+
             if (clearLogFile)
                 ClearLogFile();
         }
