@@ -10,7 +10,7 @@ namespace ModpackUpdateManager.Managers
 {
     public class ModDataAccessor
     {
-        public List<ModFileData> sourceFolderModfileData;
+        public List<ModData> sourceFolderModData;
         private string sourceModFolderPath = PersistentVariables.GetSourceModPath();
         private string outputModFolderPath = PersistentVariables.GetOutputModPath();
         private List<string> nonDesiredApis = new List<string>();
@@ -18,57 +18,57 @@ namespace ModpackUpdateManager.Managers
 
         public int GetSourceModQuantity()
         {
-            return sourceFolderModfileData.Count;
+            return sourceFolderModData.Count;
         }
 
-        public ModDataAccessor(Dictionary<string, string> gameFlavorIds, List<string> _searchTermBlacklist, Action<string> onSourceModFileNotFound, Action onSkippingExisting)
+        public ModDataAccessor(Dictionary<string, string> gameFlavorIds, List<string> _searchTermBlacklist, Action<string> onSourceModTomlFileContentNotFound, Action onSkippingExisting)
         {
             InitializeData(gameFlavorIds);
             searchTermBlacklist = _searchTermBlacklist;
-            sourceFolderModfileData = GetAllModFileData(sourceModFolderPath, onSourceModFileNotFound);
+            sourceFolderModData = GetAllModData(sourceModFolderPath, onSourceModTomlFileContentNotFound);
 
             SkipExisting(onSkippingExisting);
         }
-        public List<ModFileData> GetAllModFileData(string path, Action<string> onModTomlFileNotFound)
+        public List<ModData> GetAllModData(string path, Action<string> onModTomlFileNotFound)
         {
-            List<ModFileData> modFileDatum = new List<ModFileData>();
+            List<ModData> ModTomlFileContentDatum = new List<ModData>();
             string[] jarFiles = Directory.GetFiles(path, "*.jar")
                          .Select(Path.GetFileName)
                          .ToArray();
 
             foreach (string fileName in jarFiles)
             {
-                ModFileData modFileData = GetModFileData(path, fileName);
+                ModData ModData = GetModData(path, fileName);
 
-                if (modFileData == null)
+                if (ModData == null)
                 {
                     onModTomlFileNotFound?.Invoke(Path.Combine(path, fileName));
                 }
                 else
                 {
-                    modFileDatum.Add(modFileData);
+                    ModTomlFileContentDatum.Add(ModData);
                 }
             }
 
-            return modFileDatum;
+            return ModTomlFileContentDatum;
         }
 
-        public ModFileData GetModFileData(string path, string fileName)
+        public ModData GetModData(string path, string fileName)
         {
-            ModFileData modFileData = null;
-            ModFile modFile = JsonConvert.DeserializeObject<ModFile>(ReadJarModFile(Path.Combine(path, fileName)));
+            ModData ModData = null;
+            ModTomlFileContent ModTomlFileContent = JsonConvert.DeserializeObject<ModTomlFileContent>(ReadJarModTomlFileContent(Path.Combine(path, fileName)));
 
-            if (modFile != null)
+            if (ModTomlFileContent != null)
             {
                 string displayName = "";
-                string rawDisplayName = modFile.mods[0].displayName;
+                string rawDisplayName = ModTomlFileContent.mods[0].displayName;
 
                 if (rawDisplayName != null)
                 {
                     displayName = Utilities.ToHumanReadable(rawDisplayName);
                     string searchableName = Utilities.FastReplace(displayName, PersistentVariables.GetSelectedApi(), " ", false, true);
                     searchableName = GetFormattedDisplayNameForSearch(searchableName);
-                    modFileData = new ModFileData(displayName, rawDisplayName, modFile.displayURL, fileName, searchableName);
+                    ModData = new ModData(displayName, rawDisplayName, ModTomlFileContent.displayURL, fileName, searchableName);
                 }
                 else
                 {
@@ -76,7 +76,7 @@ namespace ModpackUpdateManager.Managers
                 }
             }
 
-            return modFileData;
+            return ModData;
         }
         public string RemoveUndesiredApisFromString(string str)
         {
@@ -91,17 +91,17 @@ namespace ModpackUpdateManager.Managers
             return Utilities.RemoveDoubleSpacings(str);
         }
 
-        public ModFileData GetCurrentlyProcessedModFileData()
+        public ModData GetCurrentlyProcessedModData()
         {
-            ModFileData modFileData = null;
+            ModData ModData = null;
             int dataIndex = PersistentVariables.GetCurrentModListIndex();
 
-            if (dataIndex < sourceFolderModfileData.Count)
+            if (dataIndex < sourceFolderModData.Count)
             {
-                modFileData = sourceFolderModfileData[dataIndex];
+                ModData = sourceFolderModData[dataIndex];
             }
 
-            return modFileData;
+            return ModData;
         }
         public string GetFormattedDisplayNameForSearch(string displayName)
         {
@@ -144,7 +144,7 @@ namespace ModpackUpdateManager.Managers
         {
             string modFolderPath = PersistentVariables.GetOutputModPath();
 
-            List<ModFileData> modFileDatum = new List<ModFileData>();
+            List<ModData> ModTomlFileContentDatum = new List<ModData>();
             string[] jarFiles = Directory.GetFiles(modFolderPath, "*.jar")
                          .Select(Path.GetFileName)
                          .ToArray();
@@ -152,7 +152,7 @@ namespace ModpackUpdateManager.Managers
 
             foreach (string fileName in jarFiles)
             {
-                HashSet<string> outputDependencies = GetOutputDependencies(ReadJarModFile(Path.Combine(modFolderPath, fileName)));
+                HashSet<string> outputDependencies = GetOutputDependencies(ReadJarModTomlFileContent(Path.Combine(modFolderPath, fileName)));
                 dependencyModIds.Concat(outputDependencies);
             }
 
@@ -165,16 +165,16 @@ namespace ModpackUpdateManager.Managers
 
         private void SkipExisting(Action onSkipExisting)
         {
-            int sourceModCount = sourceFolderModfileData.Count;
+            int sourceModCount = sourceFolderModData.Count;
 
             if (PersistentVariables.GetSkipExisting())
             {
-                List<ModFileData> outputFolderModfileData = GetAllModFileData(outputModFolderPath, null);
-                sourceFolderModfileData = sourceFolderModfileData.Where(sourceMod =>
-                    (!outputFolderModfileData.Select(outputMod => outputMod.searchableName).ToList()
-                        .Contains(sourceMod.searchableName))).ToList<ModFileData>();
+                List<ModData> outputFolderModData = GetAllModData(outputModFolderPath, null);
+                sourceFolderModData = sourceFolderModData.Where(sourceMod =>
+                    (!outputFolderModData.Select(outputMod => outputMod.searchableName).ToList()
+                        .Contains(sourceMod.searchableName))).ToList<ModData>();
 
-                int modCountToInstall = sourceFolderModfileData.Count;
+                int modCountToInstall = sourceFolderModData.Count;
 
                 if (sourceModCount != modCountToInstall)
                 {
@@ -198,7 +198,7 @@ namespace ModpackUpdateManager.Managers
             }
         }
 
-        private static string ReadJarModFile(string path)
+        private static string ReadJarModTomlFileContent(string path)
         {
             using (ZipArchive archive = ZipFile.OpenRead(path))
             {

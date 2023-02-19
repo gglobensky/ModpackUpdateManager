@@ -140,8 +140,11 @@
     <Compile Include="Managers\PersistentVariables.cs" />
     <Compile Include="Managers\UserMessaging.cs" />
     <Compile Include="Managers\Utilities.cs" />
+    <Compile Include="Models\LogObject.cs" />
+    <Compile Include="Models\ModData.cs" />
     <Compile Include="Models\ModDataApiResponse.cs" />
-    <Compile Include="Models\ModFile.cs" />
+    <Compile Include="Models\ModSearchResult.cs" />
+    <Compile Include="Models\ModTomlFileContent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

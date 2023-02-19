@@ -83,7 +83,7 @@ namespace ModpackUpdateManager.Managers
 
         public async Task SelectAndDownloadMod()
         {
-            string searchableName = modOperationManager.GetModDataAccessor().GetCurrentlyProcessedModFileData().searchableName;
+            string searchableName = modOperationManager.GetModDataAccessor().GetCurrentlyProcessedModData().searchableName;
             LogFile.LogMessage($"searchableName: {searchableName}");
             ModSearchResult modSearchResult = (await GetAutoSelectedMod(searchableName, modOperationManager.OnSearchResultAutoSelected));
 
