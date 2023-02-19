@@ -173,9 +173,13 @@ namespace ModpackUpdateManager.Managers
             if (!isProcessing && PersistentVariables.GetIsInAutoMode())
             {
                 isProcessing = true;
+                userMessaging.ShowMessage("Pausing Auto Mode...");
+
                 PersistentVariables.SetIsInAutoMode(false);
                 PersistentVariables.SetIsAutoModePaused(true);
-                await Task.Delay(2500);
+                // Give time for other tasks to close in the worst case scenario
+                await Task.Delay(2100);
+                PersistentVariables.SetIsAutoModePaused(false);
                 await LoadSearchUrl();
                 isProcessing = false;
             }
