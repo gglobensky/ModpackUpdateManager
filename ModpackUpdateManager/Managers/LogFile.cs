@@ -12,9 +12,9 @@ namespace ModpackUpdateManager.Managers
             if (clearLogFile)
                 ClearLogFile();
         }
-        public static void LogMessage(string message)
+        public static async void LogMessage(string message)
         {
-            Utilities.FileWriteAsync(logFilePath, $"{DateTime.Now.ToLongTimeString()}: {message}").Wait();
+            await Utilities.FileWriteAsync(logFilePath, $"{DateTime.Now.ToLongTimeString()}: {message}");
         }
         private static void ClearLogFile()
         {

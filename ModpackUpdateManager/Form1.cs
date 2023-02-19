@@ -12,7 +12,6 @@ namespace ModpackUpdateManager
         {
             InitializeComponent();
             modOperationManager = new ModOperationManager(this, getModSearchResultFullPath, gameVersionIds, gameFlavorIds, searchTermBlacklist);
-            ModeChangeUserOutput();
         }
 
         public void AddControl(Control control)
@@ -116,7 +115,6 @@ namespace ModpackUpdateManager
 
             if (!PersistentVariables.GetIsInAutoMode())
             {
-                SetOutputText("Please press Manual Step or Start Auto to perform operations...");
                 ToggleControlsExceptStop(true);
             }
             else

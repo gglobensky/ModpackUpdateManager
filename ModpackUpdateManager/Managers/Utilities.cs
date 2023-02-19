@@ -4,18 +4,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ModpackUpdateManager.Managers
 {
     public static class Utilities
     {
+        private static SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+
         public static async Task FileWriteAsync(string filePath, string message, bool append = true)
         {
-            using (FileStream stream = new FileStream(filePath, append ? FileMode.Append : FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
-            using (StreamWriter sw = new StreamWriter(stream))
+            await _semaphore.WaitAsync();
+
+            try
             {
-                await sw.WriteLineAsync(message);
+                using (FileStream stream = new FileStream(filePath, append ? FileMode.Append : FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
+                using (StreamWriter sw = new StreamWriter(stream))
+                {
+                    await sw.WriteLineAsync(message);
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
 

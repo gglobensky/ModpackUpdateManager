@@ -57,6 +57,8 @@ namespace ModpackUpdateManager.Managers
 
             SearchUrl = BuildSearchUrl(ModData.searchableName);
             BrowserManager.Initialize(SearchUrl, this, MainForm, OnDownloadUpdated, ParseDataFromRequestUrl);
+
+            ShowSearchingUserMessage();
         }
 
         //Look into releaseType. 1 is for release. 2 for beta, maybe 3 for alpha?
@@ -206,6 +208,15 @@ namespace ModpackUpdateManager.Managers
         {
             BrowserManager.Dispose();
         }
+        public bool IsOnModMainPage()
+        {
+            if (BrowserManager.Address.Contains(AppSettings.GetBaseModUrl()))
+            {
+                //It's assumed that we are on a mod's main page
+                return (Utilities.CountCharsInString(BrowserManager.Address, '/') == 5);
+            }
+            return false;
+        }
 
         private void OnDownloadUpdated(CefSharp.DownloadItem downloadItem)
         {
@@ -217,7 +228,6 @@ namespace ModpackUpdateManager.Managers
             {
                 //Manually added
                 OnOtherDownloadCompleted(System.IO.Path.GetFileName(downloadItem.FullPath));
-                LogFile.LogMessage($"{System.IO.Path.GetFileName(downloadItem.FullPath)} == {lastProcessedModFileName}");
             }
             else
             {
@@ -325,15 +335,6 @@ namespace ModpackUpdateManager.Managers
             SaveToJson(manuallyAddedModPath, filename, "Manually added");
         }
 
-        private bool IsOnModMainPage()
-        {
-            if (BrowserManager.Address.Contains(AppSettings.GetBaseModUrl()))
-            {
-                //It's assumed that we are on a mod's main page
-                return (Utilities.CountCharsInString(BrowserManager.Address, '/') == 5);
-            }
-            return false;
-        }
         private CefSharp.IResourceRequestHandler ParseDataFromRequestUrl(CefSharp.IRequest request)
         {
             if (request.Url.Contains(AppSettings.GetApiBaseUrl()))
