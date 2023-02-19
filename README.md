@@ -9,7 +9,9 @@ How it works:
 
 The program scans a provided mod directory and goes through every jar file to look for the mods.toml file inside it.
 The algorithm parses the displayName inside it and uses the CefSharp library to search Curseforge for it.
+
 In automatic mode, the program finds the best fit in the search results for the given API and Minecraft version and downloads it.
+
 In manual mode, the program will search for you but ask for a manual choice in the list. Then, it will automatically download the mod upon confirmation.
 
 
