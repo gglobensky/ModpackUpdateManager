@@ -172,7 +172,7 @@ namespace ModpackUpdateManager.Managers
                 isProcessing = true;
                 PersistentVariables.SetIsInAutoMode(false);
                 PersistentVariables.SetIsAutoModePaused(true);
-                System.Threading.Thread.Sleep(2500);
+                await Task.Delay(2500);
                 await LoadSearchUrl();
                 isProcessing = false;
             }
@@ -201,11 +201,16 @@ namespace ModpackUpdateManager.Managers
             return modDataAccessor;
         }
 
+        public void Dispose()
+        {
+            BrowserManager.Dispose();
+        }
+
         private void OnDownloadUpdated(CefSharp.DownloadItem downloadItem)
         {
             if (downloadItem.IsComplete && lastProcessedModFileName != null && System.IO.Path.GetFileName(downloadItem.FullPath) == Utilities.FastReplace(lastProcessedModFileName, " ", "+"))
             {
-                OnModFileDownloadCompleted(System.IO.Path.GetFileName(downloadItem.FullPath)).Wait();
+                OnModFileDownloadCompleted(System.IO.Path.GetFileName(downloadItem.FullPath));
             }
             else if (downloadItem.IsComplete)
             {

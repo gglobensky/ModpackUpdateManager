@@ -85,7 +85,7 @@ namespace ModpackUpdateManager.Managers
         {
             string searchableName = modOperationManager.GetModDataAccessor().GetCurrentlyProcessedModData().searchableName;
             LogFile.LogMessage($"searchableName: {searchableName}");
-            ModSearchResult modSearchResult = (await GetAutoSelectedMod(searchableName, modOperationManager.OnSearchResultAutoSelected));
+            ModSearchResult modSearchResult = await GetAutoSelectedMod(searchableName, modOperationManager.OnSearchResultAutoSelected);
 
             if (modSearchResult == null)
             {

@@ -39,8 +39,8 @@ namespace ModpackUpdateManager.Managers
         {
             if (!PersistentVariables.GetIsAutoModePaused())
             {
+                await Task.Delay(2000);
                 // Avoid too many requests
-                System.Threading.Thread.Sleep(2000);
                 await browser.LoadUrlAsync(url);
             }
         }
@@ -132,6 +132,13 @@ namespace ModpackUpdateManager.Managers
 
             return result;
 
+        }
+
+        public static void Dispose()
+        {
+            browser.AddressChanged -= Browser_AddressChanged;
+
+            Cef.Shutdown();
         }
     }
 

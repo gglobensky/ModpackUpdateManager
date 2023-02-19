@@ -47,7 +47,6 @@ namespace ModpackUpdateManager
         }
         public void ToggleControlsEnabled(bool isEnabled)
         {
-            SetOutputText(isEnabled ? "IsEnabledForReal" : "NowItAint");
             btn_Back.Enabled = isEnabled;
             btn_Forward.Enabled = isEnabled;
             btn_ManualStep.Enabled = isEnabled;
@@ -55,8 +54,6 @@ namespace ModpackUpdateManager
             btn_StartAuto.Enabled = isEnabled;
             txt_URL.Enabled = isEnabled;
             btn_StopAuto.Enabled = isEnabled;
-
-            btn_ManualStep.Visible = isEnabled;
         }
 
         private void ToggleControlsExceptStop(bool isEnabled)
@@ -130,5 +127,9 @@ namespace ModpackUpdateManager
             }
         }
 
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            modOperationManager.Dispose();
+        }
     }
 }
