@@ -55,6 +55,11 @@ namespace ModpackUpdateManager
             btn_StopAuto.Enabled = isEnabled;
         }
 
+        public void ShowMessageBox(string message, string title)
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK);
+        }
+
         private void ToggleControlsExceptStop(bool isEnabled)
         {
             btn_Back.Enabled = isEnabled;

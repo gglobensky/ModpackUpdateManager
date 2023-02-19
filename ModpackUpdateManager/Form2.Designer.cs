@@ -190,7 +190,7 @@
             this.MinimumSize = new System.Drawing.Size(555, 232);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Minecraft Modpack Updater";
+            this.Text = "Minecraft Modpack Update Manager";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();

@@ -309,6 +309,7 @@ namespace ModpackUpdateManager.Managers
                 userMessaging.ShowMessage($"Dependency {dependency} required for modpack, please confirm presence manually.");
                 SaveToJson(dependenciesModPath, dependency, true);
             }
+            userMessaging.ShowMessageBox("Modpack update process completed, please verify log files in output folder.", "Operation Successfully Completed");
         }
 
         private bool IsDownloadedModDisplayNameMatchingSource(string sourceFileName, string targetFileName)

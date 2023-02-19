@@ -13,5 +13,10 @@
         {
             MainForm.SetOutputText(message);
         }
+
+        public void ShowMessageBox(string message, string title)
+        {
+            MainForm.ShowMessageBox(message, title);
+        }
     }
 }
