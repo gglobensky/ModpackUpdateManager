@@ -144,7 +144,6 @@ namespace ModpackUpdateManager
             }
 
             PersistentVariables.SetSkipExisting(checkbox_SkipExisting.Checked);
-            PersistentVariables.SetIsVerboseLogging(checkbox_VerboseLog.Checked);
             PersistentVariables.SetSelectedApi(combo_Api.SelectedValue.ToString());
             PersistentVariables.SetSelectedVersion(combo_Version.SelectedValue.ToString());
             PersistentVariables.SetSourceModPath(txt_SourcePath.Text);
@@ -191,6 +190,5 @@ namespace ModpackUpdateManager
                 Utilities.FileWriteAsync(getModSearchResultScriptPath, getModSearchResultDefaultScript, false).Wait();
             }
         }
-
     }
 }

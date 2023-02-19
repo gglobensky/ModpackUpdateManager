@@ -9,13 +9,9 @@
             MainForm = _MainForm;
         }
 
-        public void ShowMessage(string message, bool logOutput)
+        public void ShowMessage(string message)
         {
             MainForm.SetOutputText(message);
-            if (logOutput)
-            {
-                LogFile.LogMessage(message);
-            }
         }
     }
 }

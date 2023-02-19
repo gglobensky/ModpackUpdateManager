@@ -30,10 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lbl_Api = new System.Windows.Forms.Label();
+            this.lbl_Version = new System.Windows.Forms.Label();
             this.btn_Accept = new System.Windows.Forms.Button();
             this.combo_Api = new System.Windows.Forms.ComboBox();
             this.combo_Version = new System.Windows.Forms.ComboBox();
-            this.checkbox_VerboseLog = new System.Windows.Forms.CheckBox();
             this.checkbox_SkipExisting = new System.Windows.Forms.CheckBox();
             this.lbl_OutputPath = new System.Windows.Forms.Label();
             this.lbl_SourcePath = new System.Windows.Forms.Label();
@@ -44,8 +45,6 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
             this.tip_MainTooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.lbl_Version = new System.Windows.Forms.Label();
-            this.lbl_Api = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,7 +56,6 @@
             this.panel2.Controls.Add(this.btn_Accept);
             this.panel2.Controls.Add(this.combo_Api);
             this.panel2.Controls.Add(this.combo_Version);
-            this.panel2.Controls.Add(this.checkbox_VerboseLog);
             this.panel2.Controls.Add(this.checkbox_SkipExisting);
             this.panel2.Controls.Add(this.lbl_OutputPath);
             this.panel2.Controls.Add(this.lbl_SourcePath);
@@ -69,6 +67,24 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(527, 186);
             this.panel2.TabIndex = 4;
+            // 
+            // lbl_Api
+            // 
+            this.lbl_Api.AutoSize = true;
+            this.lbl_Api.Location = new System.Drawing.Point(425, 69);
+            this.lbl_Api.Name = "lbl_Api";
+            this.lbl_Api.Size = new System.Drawing.Size(40, 13);
+            this.lbl_Api.TabIndex = 12;
+            this.lbl_Api.Text = "For Api";
+            // 
+            // lbl_Version
+            // 
+            this.lbl_Version.AutoSize = true;
+            this.lbl_Version.Location = new System.Drawing.Point(422, 19);
+            this.lbl_Version.Name = "lbl_Version";
+            this.lbl_Version.Size = new System.Drawing.Size(54, 13);
+            this.lbl_Version.TabIndex = 11;
+            this.lbl_Version.Text = "Update to";
             // 
             // btn_Accept
             // 
@@ -97,17 +113,6 @@
             this.combo_Version.Name = "combo_Version";
             this.combo_Version.Size = new System.Drawing.Size(79, 21);
             this.combo_Version.TabIndex = 2;
-            // 
-            // checkbox_VerboseLog
-            // 
-            this.checkbox_VerboseLog.AutoSize = true;
-            this.checkbox_VerboseLog.Location = new System.Drawing.Point(23, 149);
-            this.checkbox_VerboseLog.Name = "checkbox_VerboseLog";
-            this.checkbox_VerboseLog.Size = new System.Drawing.Size(82, 17);
-            this.checkbox_VerboseLog.TabIndex = 7;
-            this.checkbox_VerboseLog.Text = "Verbose log";
-            this.tip_MainTooltip.SetToolTip(this.checkbox_VerboseLog, "Log all displayed text to logs.log");
-            this.checkbox_VerboseLog.UseVisualStyleBackColor = true;
             // 
             // checkbox_SkipExisting
             // 
@@ -173,24 +178,6 @@
             this.txt_SourcePath.Size = new System.Drawing.Size(315, 20);
             this.txt_SourcePath.TabIndex = 1;
             // 
-            // lbl_Version
-            // 
-            this.lbl_Version.AutoSize = true;
-            this.lbl_Version.Location = new System.Drawing.Point(422, 19);
-            this.lbl_Version.Name = "lbl_Version";
-            this.lbl_Version.Size = new System.Drawing.Size(54, 13);
-            this.lbl_Version.TabIndex = 11;
-            this.lbl_Version.Text = "Update to";
-            // 
-            // lbl_Api
-            // 
-            this.lbl_Api.AutoSize = true;
-            this.lbl_Api.Location = new System.Drawing.Point(425, 69);
-            this.lbl_Api.Name = "lbl_Api";
-            this.lbl_Api.Size = new System.Drawing.Size(40, 13);
-            this.lbl_Api.TabIndex = 12;
-            this.lbl_Api.Text = "For Api";
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -198,6 +185,9 @@
             this.ClientSize = new System.Drawing.Size(539, 193);
             this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(555, 232);
+            this.MinimumSize = new System.Drawing.Size(555, 232);
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Minecraft Modpack Updater";
@@ -218,7 +208,6 @@
         private System.Windows.Forms.TextBox txt_OutputPath;
         private System.Windows.Forms.Button btn_BrowseSource;
         private System.Windows.Forms.TextBox txt_SourcePath;
-        private System.Windows.Forms.CheckBox checkbox_VerboseLog;
         private System.Windows.Forms.ComboBox combo_Version;
         private System.Windows.Forms.ComboBox combo_Api;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;

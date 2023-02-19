@@ -21,7 +21,6 @@ namespace ModpackUpdateManager.Managers
 
         private string missingModPath = Path.Combine(Path.GetFullPath(PersistentVariables.GetOutputModPath()), MissingModFileName);
         private string manuallyAddedModPath = Path.Combine(Path.GetFullPath(PersistentVariables.GetOutputModPath()), ManuallyAddedModFileName);
-        private bool verboseLogging = PersistentVariables.GetIsVerboseLogging();
 
         private static string lastProcessedModFileName;
 
@@ -57,12 +56,12 @@ namespace ModpackUpdateManager.Managers
         //Look into releaseType. 1 is for release. 2 for beta, maybe 3 for alpha?
         public async Task<int> DownloadMod()
         {
-            userMessaging.ShowMessage($"Initiating Download Sequence...", verboseLogging);
+            userMessaging.ShowMessage($"Initiating Download Sequence...");
 
             string baseModAddress = BrowserManager.Address;
             PersistentVariables.SetBaseModAddress(baseModAddress);
 
-            userMessaging.ShowMessage($"Loading primary url...", verboseLogging);
+            userMessaging.ShowMessage($"Loading primary url...");
 
             if (PersistentVariables.GetIsAutoModePaused())
             {
@@ -80,7 +79,7 @@ namespace ModpackUpdateManager.Managers
             //The modId is saved persistently when intercepted
             string currentModId = PersistentVariables.GetCurrentModId();
 
-            userMessaging.ShowMessage($"Verifying latest file mod available...", verboseLogging);
+            userMessaging.ShowMessage($"Verifying latest file mod available...");
             //Build url to search for latest version of the mod matching the desired API and Minecraft version
             string modFileDataUrl = String.Format(AppSettings.GetCurseforgeApiMinecraftSearchUrl(), currentModId, gameVersionIds[PersistentVariables.GetSelectedVersion()], gameFlavorIds[PersistentVariables.GetSelectedApi()]);
 
@@ -92,7 +91,7 @@ namespace ModpackUpdateManager.Managers
             {
                 string response = JsonConvert.SerializeObject(modDataApiResponse);
                 string downloadFileNotFoundMessage = $"Could not find file for mod {modDataAccessor.GetCurrentlyProcessedModFileData().displayName} available for this Minecraft version";
-                userMessaging.ShowMessage(downloadFileNotFoundMessage, verboseLogging);
+                userMessaging.ShowMessage(downloadFileNotFoundMessage);
                 SkipMod(downloadFileNotFoundMessage);
                 return -1;
             }
@@ -103,8 +102,8 @@ namespace ModpackUpdateManager.Managers
             }
 
             SetLastProcessedModFileName(modFileName);
-            userMessaging.ShowMessage($"Successfully found mod file to download for mod {modDataAccessor.GetCurrentlyProcessedModFileData().displayName}", verboseLogging);
-            userMessaging.ShowMessage($"Downloading File {modFileName}...", true);
+            userMessaging.ShowMessage($"Successfully found mod file to download for mod {modDataAccessor.GetCurrentlyProcessedModFileData().displayName}");
+            userMessaging.ShowMessage($"Downloading File {modFileName}...");
             await BrowserManager.LoadUrl(string.Format(AppSettings.GetDownloadUrl(), baseModAddress, modDataApiResponse.data[0].id));
 
             return 0;
@@ -113,7 +112,7 @@ namespace ModpackUpdateManager.Managers
         public void SkipMod(string reason)
         {
             string modName = modDataAccessor.GetCurrentlyProcessedModFileData().displayName;
-            userMessaging.ShowMessage($"Skipping mod {modName}...", verboseLogging);
+            userMessaging.ShowMessage($"Skipping mod {modName}...");
             SaveToJson(missingModPath, modName, reason, false);
             FinalizeDownload();
         }
@@ -137,7 +136,7 @@ namespace ModpackUpdateManager.Managers
 
         public ModSearchResult OnSearchResultAutoSelected(ModSearchResult modSearchResult)
         {
-            userMessaging.ShowMessage($"{modSearchResult.Value} automatically selected", verboseLogging);
+            userMessaging.ShowMessage($"{modSearchResult.Value} automatically selected");
             return modSearchResult;
         }
 
@@ -211,13 +210,13 @@ namespace ModpackUpdateManager.Managers
             }
             else
             {
-                userMessaging.ShowMessage("Downloading...", verboseLogging);
+                userMessaging.ShowMessage("Downloading...");
             }
         }
 
         private void OnSkippingExistingMods()
         {
-            userMessaging.ShowMessage("Found files in output folder, will skip them as specified in configuration", verboseLogging);
+            userMessaging.ShowMessage("Found files in output folder, will skip them as specified in configuration");
         }
 
         private void SaveToJson(string path, string name, string reason, bool appendToFile = true)
@@ -227,10 +226,10 @@ namespace ModpackUpdateManager.Managers
 
         private void ShowSearchingUserMessage()
         {
-            userMessaging.ShowMessage($"Searching for {modDataAccessor.GetCurrentlyProcessedModFileData().searchableName}...", verboseLogging);
+            userMessaging.ShowMessage($"Searching for {modDataAccessor.GetCurrentlyProcessedModFileData().searchableName}...");
             if (!PersistentVariables.GetIsInAutoMode())
             {
-                userMessaging.ShowMessage($"Please manually select the appropriate mod from the results the click the Step button again.", verboseLogging);
+                userMessaging.ShowMessage($"Please manually select the appropriate mod from the results the click the Step button again.");
             }
         }
         private async Task FinalizeDownload(string fileName = "")
@@ -243,7 +242,7 @@ namespace ModpackUpdateManager.Managers
             {
                 if (!IsDownloadedModDisplayNameMatchingSource(modDataAccessor.GetCurrentlyProcessedModFileData().fileName, fileName))
                 {
-                    userMessaging.ShowMessage($"File {fileName} not matching with source. Moved to invalid, please manually confirm.", true);
+                    userMessaging.ShowMessage($"File {fileName} not matching with source. Moved to invalid, please manually confirm.");
 
 
                     DirectoryInfo di = Directory.CreateDirectory(invalidFolderPath);
@@ -277,7 +276,7 @@ namespace ModpackUpdateManager.Managers
 
             foreach (string dependency in missingDependencies)
             {
-                userMessaging.ShowMessage($"Warning, dependency {dependency} not found in output file. Please download manually.", verboseLogging);
+                userMessaging.ShowMessage($"Warning, dependency {dependency} not found in output file. Please download manually.");
                 SaveToJson(missingModPath, dependency, "Missing dependency, no displayName is available for dependencies in mods.toml. Cannot download automatically.");
             }
         }
@@ -295,18 +294,18 @@ namespace ModpackUpdateManager.Managers
 
         private void onModTomlFileNotFound(string filePath)
         {
-            userMessaging.ShowMessage($"Warning: Could not file mods.toml file in {filePath}", verboseLogging);
+            userMessaging.ShowMessage($"Warning: Could not file mods.toml file in {filePath}");
         }
 
         private async Task OnModFileDownloadCompleted(string fileName)
         {
-            userMessaging.ShowMessage($"File {fileName} downloaded successfully...", verboseLogging);
+            userMessaging.ShowMessage($"File {fileName} downloaded successfully...");
             await FinalizeDownload(fileName);
         }
 
         private void OnOtherDownloadCompleted(string filename)
         {
-            userMessaging.ShowMessage($"Non modpack file {filename} manually downloaded successfully...", verboseLogging);
+            userMessaging.ShowMessage($"Non modpack file {filename} manually downloaded successfully...");
             SaveToJson(manuallyAddedModPath, filename, "Manually added");
         }
 
@@ -330,7 +329,7 @@ namespace ModpackUpdateManager.Managers
                 //It's assumed that we are on a mod's main page
                 if (!PersistentVariables.GetIsInAutoMode() && Utilities.CountCharsInString(request.Url, '/') == 5)
                 {
-                    userMessaging.ShowMessage("Please press the Download button to begin the process...", verboseLogging);
+                    userMessaging.ShowMessage("Please press the Download button to begin the process...");
                 }
             }
 

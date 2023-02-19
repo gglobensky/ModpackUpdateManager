@@ -134,18 +134,6 @@ namespace ModpackUpdateManager.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool VerboseLogging {
-            get {
-                return ((bool)(this["VerboseLogging"]));
-            }
-            set {
-                this["VerboseLogging"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool SkipExisting {
             get {
                 return ((bool)(this["SkipExisting"]));

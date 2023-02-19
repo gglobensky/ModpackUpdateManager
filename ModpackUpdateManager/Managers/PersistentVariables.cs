@@ -91,15 +91,6 @@
             Properties.Settings.Default.SelectedApi = selectedApi;
             Properties.Settings.Default.Save();
         }
-        public static bool GetIsVerboseLogging()
-        {
-            return Properties.Settings.Default.VerboseLogging;
-        }
-        public static void SetIsVerboseLogging(bool verboseLogging)
-        {
-            Properties.Settings.Default.VerboseLogging = verboseLogging;
-            Properties.Settings.Default.Save();
-        }
         public static bool GetSkipExisting()
         {
             return Properties.Settings.Default.SkipExisting;
