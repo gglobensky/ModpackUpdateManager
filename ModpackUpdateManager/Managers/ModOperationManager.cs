@@ -42,6 +42,7 @@ namespace ModpackUpdateManager.Managers
             LogFile.Initialize(executionLogFullPath);
             PersistentVariables.SetCurrentModListIndex(0);
             PersistentVariables.SetIsInAutoMode(false);
+            PersistentVariables.SetIsAutoModePaused(false);
             userMessaging = new UserMessaging(MainForm);
             modDataAccessor = new ModDataAccessor(gameFlavorIds, _searchTermBlacklist, onModTomlFileNotFound, OnSkippingExistingMods);
             automation = new Automation(gameFlavorIds, modDataAccessor.GetNonDesiredApis(), getModSearchResultFullPath, this);

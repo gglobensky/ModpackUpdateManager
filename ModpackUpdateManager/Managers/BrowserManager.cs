@@ -39,9 +39,9 @@ namespace ModpackUpdateManager.Managers
         {
             if (!PersistentVariables.GetIsAutoModePaused())
             {
+                await browser.LoadUrlAsync(url);
                 await Task.Delay(2000);
                 // Avoid too many requests
-                await browser.LoadUrlAsync(url);
             }
         }
 
