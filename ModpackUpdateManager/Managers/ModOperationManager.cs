@@ -76,7 +76,7 @@ namespace ModpackUpdateManager.Managers
             string modName = modDataAccessor.GetCurrentlyProcessedModData().displayName;
             userMessaging.ShowMessage($"Skipping mod {modName}...");
 
-            ManageReport(status, modDataAccessor.GetCurrentlyProcessedModData().displayName, reason);
+            ManageReport(status, modName, reason);
 
             if (!TryGetNextModInList())
             {
@@ -264,6 +264,8 @@ namespace ModpackUpdateManager.Managers
             else if (hasProcessedMod == TaskResult.Cancelled)
                 return TaskResult.Cancelled;
 
+            string modName = modDataAccessor.GetCurrentlyProcessedModData().displayName;
+
             if (PersistentVariables.GetDownloadMods())
             {
                 string fileName = await GetDownloadedFileName();
@@ -273,16 +275,16 @@ namespace ModpackUpdateManager.Managers
                     string message = $"File {fileName} not matching with source. Moved to invalid, please manually confirm.";
 
                     userMessaging.ShowMessage(message);
-                    ManageReport(ModCompletionStatus.Flagged, modDataAccessor.GetCurrentlyProcessedModData().displayName, message);
+                    ManageReport(ModCompletionStatus.Flagged, modName, message);
                 }
                 else
                 {
-                    ManageReport(ModCompletionStatus.Success, modDataAccessor.GetCurrentlyProcessedModData().displayName, "File downloaded successfully.");
+                    ManageReport(ModCompletionStatus.Success, modName, "File downloaded successfully.");
                 }
             }
             else
             {
-                ManageReport(ModCompletionStatus.Success, modDataAccessor.GetCurrentlyProcessedModData().displayName, "Successfully found mod for target version.");
+                ManageReport(ModCompletionStatus.Success, modName, "Successfully found mod for target version.");
             }
 
             if (!TryGetNextModInList())
