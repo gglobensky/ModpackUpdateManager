@@ -151,7 +151,7 @@ namespace ModpackUpdateManager.Managers
                 target = $"( |^){target}( |$)";
             }
 
-            return System.Text.RegularExpressions.Regex.Replace(input, target, replacement, options );
+            return System.Text.RegularExpressions.Regex.Replace(input, target, replacement, options);
         }
 
         public static bool IsSourceInTarget(string source, string target, bool caseSensitive = false, bool exactMatch = false)

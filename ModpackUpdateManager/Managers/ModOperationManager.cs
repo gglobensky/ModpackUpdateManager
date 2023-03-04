@@ -202,7 +202,7 @@ namespace ModpackUpdateManager.Managers
             do
             {
                 if (!PersistentVariables.GetIsInAutoMode() || PersistentVariables.GetIsTaskCancelled())
-                    return;             
+                    return;
 
                 ModSearchResult modSearchResult = await automation.TrySelectTargetModFromSearchList();
 
@@ -409,7 +409,7 @@ namespace ModpackUpdateManager.Managers
                 userMessaging.ShowMessage($"Please manually select the appropriate mod from the results the click the Step button again.");
             }
         }
-        
+
         private bool ValidateDownloadedMod(string fileName)
         {
             string outputPath = Path.Combine(PersistentVariables.GetOutputModPath(), fileName);

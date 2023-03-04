@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ModpackUpdateManager.Models
+﻿namespace ModpackUpdateManager.Models
 {
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
     public class ModTomlFileContent
