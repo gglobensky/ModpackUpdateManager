@@ -21,8 +21,9 @@ Configurable content: Various URLs used by the system, gameFlavorIds.json, gameV
 Sustainable traffic: The program introduces a delay of 2 seconds between each call to the website to keep the traffic sustainable and be respectful to the website owners.
 
 Report generation: You can now generate a report of available updates without downloading any files.
-Limitations:
 
+
+Limitations:
 
 The tool is not 100% perfect in automatic mode, but it seems to find about 95% of available mods based on tests. If dependencies change between Minecraft versions, the system will not be able to deal with that. You will have to manually add them. You may need to remove downloaded dependencies if they become useless between versions.
 
