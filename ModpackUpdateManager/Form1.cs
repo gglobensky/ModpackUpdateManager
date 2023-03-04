@@ -84,7 +84,7 @@ namespace ModpackUpdateManager
 
         private void btn_SkipMod_Click(object sender, EventArgs e)
         {
-            modOperationManager.SkipMod("Manual skip");
+            modOperationManager.SkipMod(Enums.ModCompletionStatus.Skipped, "Skipped Manually.");
         }
 
         private void btn_Back_Click(object sender, EventArgs e)
@@ -100,7 +100,7 @@ namespace ModpackUpdateManager
         private void btn_StopAuto_Click(object sender, EventArgs e)
         {
             SetOutputText("Stopping automatic mode...");
-            modOperationManager.StopAutoMod();
+            modOperationManager.Cancel();
             ModeChangeUserOutput();
         }
 

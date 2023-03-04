@@ -11,20 +11,38 @@ namespace ModpackUpdateManager.Managers
     public class Automation
     {
         private Dictionary<string, string> gameFlavorIds = new Dictionary<string, string>();
+        private List<string> nonDesiredApis = new List<string>();
         private string getModSearchResultScript;
-        private ModOperationManager modOperationManager;
-        public delegate ModSearchResult OnSelectionMade(ModSearchResult modSearchResult);
-        List<string> nonDesiredApis = new List<string>();
+        private ModDataAccessor modDataAccessor;
 
-        public Automation(Dictionary<string, string> _gameFlavorIds, List<string> _nonDesiredApis, string getModSearchResultFullPath, ModOperationManager _modOperationManager)
+        public delegate ModSearchResult OnSelectionMade(ModSearchResult modSearchResult);
+
+        public Automation(Dictionary<string, string> _gameFlavorIds, List<string> _nonDesiredApis, string getModSearchResultFullPath, ModDataAccessor _modDataAccessor)
         {
-            modOperationManager = _modOperationManager;
+            modDataAccessor = _modDataAccessor;
             gameFlavorIds = _gameFlavorIds;
             nonDesiredApis = _nonDesiredApis;
             getModSearchResultScript = Utilities.ReadFile(getModSearchResultFullPath);
         }
 
-        public async Task<ModSearchResult> GetAutoSelectedMod(string searchedTerm, OnSelectionMade onSelectionMade, Func<ModSearchResult> onNoSelectionMade = null, bool isRecursion = false)
+        public async Task<ModSearchResult> TrySelectTargetModFromSearchList()
+        {
+            string searchableName = modDataAccessor.GetCurrentlyProcessedModData().searchableName;
+            LogFile.LogMessage($"searchableName: {searchableName}");
+
+            ModSearchResult modSearchResult = await GetAutoSelectedMod(searchableName);
+
+            if (modSearchResult == null)
+            {
+                return null;
+            }
+
+            await BrowserManager.LoadUrl(modSearchResult.Url);
+
+            return modSearchResult;
+        }
+
+        private async Task<ModSearchResult> GetAutoSelectedMod(string searchedTerm, Func<ModSearchResult> onNoSelectionMade = null, bool isRecursion = false)
         {
             LogFile.LogMessage($"Automated mod selection started for {searchedTerm}");
 
@@ -61,7 +79,7 @@ namespace ModpackUpdateManager.Managers
             if (selectedMod != null)
             {
                 LogFile.LogMessage($"Selected mod: {selectedMod.Value} for search term: {searchedTerm}");
-                return onSelectionMade.Invoke(selectedMod);
+                return selectedMod;
             }
 
             List<string> sourceWordArray = searchedTerm.Split(' ').ToList<string>();
@@ -73,28 +91,12 @@ namespace ModpackUpdateManager.Managers
 
                 LogFile.LogMessage($"Did not find {searchedTerm}, trying with {newSearchTerm}");
 
-                await BrowserManager.LoadUrl(modOperationManager.BuildSearchUrl(newSearchTerm));
+                await BrowserManager.LoadUrl(Utilities.BuildCurseForgeSearchUrl(newSearchTerm));
 
-                return await GetAutoSelectedMod(newSearchTerm, onSelectionMade, onNoSelectionMade, true);
+                return await GetAutoSelectedMod(newSearchTerm, onNoSelectionMade, true);
             }
 
             return onNoSelectionMade?.Invoke();
-        }
-
-        public async Task SelectAndDownloadMod()
-        {
-            string searchableName = modOperationManager.GetModDataAccessor().GetCurrentlyProcessedModData().searchableName;
-            LogFile.LogMessage($"searchableName: {searchableName}");
-            ModSearchResult modSearchResult = await GetAutoSelectedMod(searchableName, modOperationManager.OnSearchResultAutoSelected);
-
-            if (modSearchResult == null)
-            {
-                modOperationManager.SkipMod("Search yielded no valid results, could not automatically download");
-                return;
-            }
-
-            await BrowserManager.LoadUrl(modSearchResult.Url);
-            await modOperationManager.DownloadMod();
         }
 
         private bool IsNonDesiredApi(string modName)
@@ -189,7 +191,7 @@ namespace ModpackUpdateManager.Managers
 
             modSearchResults.ForEach(result =>
             {
-                result.Value = modOperationManager.GetModDataAccessor().GetFormattedDisplayNameForSearch(result.Value);
+                result.Value = modDataAccessor.GetFormattedDisplayNameForSearch(result.Value);
             });
 
             return modSearchResults;

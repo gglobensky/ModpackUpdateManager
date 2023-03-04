@@ -140,6 +140,7 @@ namespace ModpackUpdateManager.Managers
 
             return dependencyModIds;
         }
+
         public HashSet<string> GetAllOutputDependencies()
         {
             string modFolderPath = PersistentVariables.GetOutputModPath();
@@ -150,14 +151,18 @@ namespace ModpackUpdateManager.Managers
                          .ToArray();
             HashSet<string> dependencyModIds = new HashSet<string>();
 
-            foreach (string fileName in jarFiles)
+            if (jarFiles != null)
             {
-                HashSet<string> outputDependencies = GetOutputDependencies(ReadJarModTomlFileContent(Path.Combine(modFolderPath, fileName)));
-                dependencyModIds.Concat(outputDependencies);
+                foreach (string fileName in jarFiles)
+                {
+                    HashSet<string> outputDependencies = GetOutputDependencies(ReadJarModTomlFileContent(Path.Combine(modFolderPath, fileName)));
+                    dependencyModIds.Concat(outputDependencies);
+                }
             }
 
             return dependencyModIds;
         }
+
         public List<string> GetNonDesiredApis()
         {
             return nonDesiredApis;

@@ -62,12 +62,12 @@ namespace ModpackUpdateManager.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IsAutoModePaused {
+        public bool IsTaskCancelled {
             get {
-                return ((bool)(this["IsAutoModePaused"]));
+                return ((bool)(this["IsTaskCancelled"]));
             }
             set {
-                this["IsAutoModePaused"] = value;
+                this["IsTaskCancelled"] = value;
             }
         }
         
@@ -140,6 +140,18 @@ namespace ModpackUpdateManager.Properties {
             }
             set {
                 this["SkipExisting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DownloadMods {
+            get {
+                return ((bool)(this["DownloadMods"]));
+            }
+            set {
+                this["DownloadMods"] = value;
             }
         }
     }

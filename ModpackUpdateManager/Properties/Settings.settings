@@ -11,7 +11,7 @@
     <Setting Name="CurrentModId" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="IsAutoModePaused" Type="System.Boolean" Scope="User">
+    <Setting Name="IsTaskCancelled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="IsInAutoMode" Type="System.Boolean" Scope="User">
@@ -30,6 +30,9 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SkipExisting" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DownloadMods" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

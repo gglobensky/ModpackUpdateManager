@@ -14,7 +14,7 @@ namespace ModpackUpdateManager.Managers
         }
         public static async void LogMessage(string message)
         {
-            await Utilities.FileWriteAsync(logFilePath, $"{DateTime.Now.ToLongTimeString()}: {message}");
+            await Utilities.FileWriteAsync(logFilePath, $"{DateTime.Now.ToString("hh:mm:ss.fff")}: {message}", true);
         }
         private static void ClearLogFile()
         {

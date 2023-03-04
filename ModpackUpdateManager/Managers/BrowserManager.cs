@@ -37,7 +37,7 @@ namespace ModpackUpdateManager.Managers
 
         public async static Task LoadUrl(string url)
         {
-            if (!PersistentVariables.GetIsAutoModePaused())
+            if (!PersistentVariables.GetIsTaskCancelled())
             {
                 await browser.LoadUrlAsync(url);
                 await Task.Delay(2000);

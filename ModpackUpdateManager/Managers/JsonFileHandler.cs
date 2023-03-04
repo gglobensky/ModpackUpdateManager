@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ModpackUpdateManager.Managers
 {
@@ -20,22 +21,14 @@ namespace ModpackUpdateManager.Managers
             return result;
         }
 
-        public async static void SerializeJsonFile<T>(string path, T instance, bool append = false)
+        public async static void SerializeJsonFile<T>(string path, T instance, bool append)
         {
             await Utilities.FileWriteAsync(path, JsonConvert.SerializeObject(instance, Formatting.Indented), append);
         }
 
-        public static void WriteJsonToFile<T>(string path, T instance, bool append)
+        public static async Task CreateFile(string path)
         {
-            List<T> instanceList = JsonFileHandler.DeserializeJsonFile<List<T>>(path);
-
-            if (instanceList == null)
-            {
-                instanceList = new List<T>();
-            }
-
-            instanceList.Add(instance);
-            JsonFileHandler.SerializeJsonFile<List<T>>(path, instanceList, append);
+            await Utilities.FileWriteAsync(path, "", false);
         }
     }
 }

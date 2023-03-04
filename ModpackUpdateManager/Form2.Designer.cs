@@ -45,12 +45,14 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
             this.tip_MainTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.checkbox_DownloadMods = new System.Windows.Forms.CheckBox();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.panel2.Controls.Add(this.checkbox_DownloadMods);
             this.panel2.Controls.Add(this.lbl_Api);
             this.panel2.Controls.Add(this.lbl_Version);
             this.panel2.Controls.Add(this.btn_Accept);
@@ -117,7 +119,7 @@
             // checkbox_SkipExisting
             // 
             this.checkbox_SkipExisting.AutoSize = true;
-            this.checkbox_SkipExisting.Location = new System.Drawing.Point(23, 126);
+            this.checkbox_SkipExisting.Location = new System.Drawing.Point(23, 149);
             this.checkbox_SkipExisting.Name = "checkbox_SkipExisting";
             this.checkbox_SkipExisting.Size = new System.Drawing.Size(85, 17);
             this.checkbox_SkipExisting.TabIndex = 6;
@@ -178,6 +180,17 @@
             this.txt_SourcePath.Size = new System.Drawing.Size(315, 20);
             this.txt_SourcePath.TabIndex = 1;
             // 
+            // checkbox_DownloadMods
+            // 
+            this.checkbox_DownloadMods.AutoSize = true;
+            this.checkbox_DownloadMods.Location = new System.Drawing.Point(23, 126);
+            this.checkbox_DownloadMods.Name = "checkbox_DownloadMods";
+            this.checkbox_DownloadMods.Size = new System.Drawing.Size(102, 17);
+            this.checkbox_DownloadMods.TabIndex = 13;
+            this.checkbox_DownloadMods.Text = "Download mods";
+            this.tip_MainTooltip.SetToolTip(this.checkbox_DownloadMods, "Download mods or generate availability report");
+            this.checkbox_DownloadMods.UseVisualStyleBackColor = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -216,5 +229,6 @@
         private System.Windows.Forms.ToolTip tip_MainTooltip;
         private System.Windows.Forms.Label lbl_Api;
         private System.Windows.Forms.Label lbl_Version;
+        private System.Windows.Forms.CheckBox checkbox_DownloadMods;
     }
 }

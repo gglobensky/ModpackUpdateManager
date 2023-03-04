@@ -35,13 +35,14 @@
             return Properties.Settings.Default.CurrentModId;
         }
 
-        public static bool GetIsAutoModePaused()
+        public static bool GetIsTaskCancelled()
         {
-            return Properties.Settings.Default.IsAutoModePaused;
+            return Properties.Settings.Default.IsTaskCancelled;
         }
-        public static void SetIsAutoModePaused(bool isAutoModPaused)
+
+        public static void SetIsTaskCancelled(bool isTaskCancelled)
         {
-            Properties.Settings.Default.IsAutoModePaused = isAutoModPaused;
+            Properties.Settings.Default.IsTaskCancelled = isTaskCancelled;
             Properties.Settings.Default.Save();
         }
 
@@ -49,24 +50,29 @@
         {
             return Properties.Settings.Default.IsInAutoMode;
         }
+
         public static void SetIsInAutoMode(bool isInAutoMode)
         {
             Properties.Settings.Default.IsInAutoMode = isInAutoMode;
             Properties.Settings.Default.Save();
         }
+
         public static string GetSourceModPath()
         {
             return Properties.Settings.Default.SourceModPath;
         }
+
         public static void SetSourceModPath(string sourceModPath)
         {
             Properties.Settings.Default.SourceModPath = sourceModPath;
             Properties.Settings.Default.Save();
         }
+
         public static string GetOutputModPath()
         {
             return Properties.Settings.Default.OutputModPath;
         }
+
         public static void SetOutputModPath(string outputModPath)
         {
             Properties.Settings.Default.OutputModPath = outputModPath;
@@ -77,28 +83,45 @@
         {
             return Properties.Settings.Default.SelectedVersion;
         }
+
         public static void SetSelectedVersion(string selectedVersion)
         {
             Properties.Settings.Default.SelectedVersion = selectedVersion;
             Properties.Settings.Default.Save();
         }
+
         public static string GetSelectedApi()
         {
             return Properties.Settings.Default.SelectedApi;
         }
+
         public static void SetSelectedApi(string selectedApi)
         {
             Properties.Settings.Default.SelectedApi = selectedApi;
             Properties.Settings.Default.Save();
         }
+
         public static bool GetSkipExisting()
         {
             return Properties.Settings.Default.SkipExisting;
         }
+
         public static void SetSkipExisting(bool skipExisting)
         {
             Properties.Settings.Default.SkipExisting = skipExisting;
             Properties.Settings.Default.Save();
         }
+
+        public static void SetDownloadMods(bool downloadMods)
+        {
+            Properties.Settings.Default.DownloadMods = downloadMods;
+            Properties.Settings.Default.Save();
+        }
+
+        public static bool GetDownloadMods()
+        {
+            return Properties.Settings.Default.DownloadMods;
+        }
+
     }
 }

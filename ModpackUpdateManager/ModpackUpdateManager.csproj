@@ -118,6 +118,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\ModCompletionStatus.cs" />
+    <Compile Include="Enums\TaskResult.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

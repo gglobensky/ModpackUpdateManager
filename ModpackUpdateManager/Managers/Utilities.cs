@@ -13,7 +13,7 @@ namespace ModpackUpdateManager.Managers
     {
         private static SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
-        public static async Task FileWriteAsync(string filePath, string message, bool append = true)
+        public static async Task FileWriteAsync(string filePath, string message, bool append)
         {
             await _semaphore.WaitAsync();
 
@@ -64,6 +64,7 @@ namespace ModpackUpdateManager.Managers
 
             return index;
         }
+
         public static int CountCharsInString(string source, char target)
         {
             int count = 0;
@@ -169,5 +170,12 @@ namespace ModpackUpdateManager.Managers
 
             return System.Text.RegularExpressions.Regex.IsMatch(target, source, options);
         }
+
+        public static string BuildCurseForgeSearchUrl(string modName)
+        {
+            modName = System.Web.HttpUtility.UrlEncode(modName);
+            return $"{AppSettings.GetCurseforgeMinecraftSearchUrl()}&search={modName}";
+        }
+
     }
 }

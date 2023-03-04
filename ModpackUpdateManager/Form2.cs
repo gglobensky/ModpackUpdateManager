@@ -143,6 +143,7 @@ namespace ModpackUpdateManager
                 return;
             }
 
+            PersistentVariables.SetDownloadMods(checkbox_DownloadMods.Checked);
             PersistentVariables.SetSkipExisting(checkbox_SkipExisting.Checked);
             PersistentVariables.SetSelectedApi(combo_Api.SelectedValue.ToString());
             PersistentVariables.SetSelectedVersion(combo_Version.SelectedValue.ToString());
@@ -160,7 +161,7 @@ namespace ModpackUpdateManager
         {
             if (!File.Exists(gameVersionIdsJsonPath))
             {
-                JsonFileHandler.SerializeJsonFile(gameVersionIdsJsonPath, gameVersionIds);
+                JsonFileHandler.SerializeJsonFile(gameVersionIdsJsonPath, gameVersionIds, false);
             }
             else
             {
@@ -169,7 +170,7 @@ namespace ModpackUpdateManager
 
             if (!File.Exists(gameFlavorIdsJsonPath))
             {
-                JsonFileHandler.SerializeJsonFile(gameFlavorIdsJsonPath, gameFlavorIds);
+                JsonFileHandler.SerializeJsonFile(gameFlavorIdsJsonPath, gameFlavorIds, false);
             }
             else
             {
@@ -178,7 +179,7 @@ namespace ModpackUpdateManager
 
             if (!File.Exists(searchTermBlacklistJsonPath))
             {
-                JsonFileHandler.SerializeJsonFile(searchTermBlacklistJsonPath, searchTermBlacklist);
+                JsonFileHandler.SerializeJsonFile(searchTermBlacklistJsonPath, searchTermBlacklist, false);
             }
             else
             {
