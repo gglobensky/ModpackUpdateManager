@@ -13,8 +13,11 @@ In manual mode, the program will search for you but ask for a manual choice in t
 Features:
 
 Confirmation system: If there is a discrepancy between the downloaded displayName in the toml file and the source, the mod will be moved to an invalid folder. The user can then choose the course of action.
+
 Configurable content: Various URLs used by the system, gameFlavorIds.json, gameVersionIds.json, searchTermBlacklist.json, and GetModSearchResults.js can be modified to suit your needs.
+
 Sustainable traffic: The program introduces a delay of 2 seconds between each call to the website to keep the traffic sustainable and be respectful to the website owners.
+
 Report generation: You can now generate a report of available updates without downloading any files.
 Limitations:
 
