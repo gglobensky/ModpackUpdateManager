@@ -1,17 +1,24 @@
-﻿using ModpackUpdateManager.Managers;
+﻿using ModpackUpdateManager.Components;
+using ModpackUpdateManager.Utils;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using static ModpackUpdateManager.Components.Core;
 
 namespace ModpackUpdateManager
 {
     public partial class Form1 : Form
     {
-        private ModOperationManager modOperationManager;
-        public Form1(string getModSearchResultFullPath, Dictionary<string, string> gameVersionIds, Dictionary<string, string> gameFlavorIds, List<string> searchTermBlacklist)
+        private UserInteraction userInteraction;
+
+        public Form1()
         {
             InitializeComponent();
-            modOperationManager = new ModOperationManager(this, getModSearchResultFullPath, gameVersionIds, gameFlavorIds, searchTermBlacklist);
+        }
+
+        public void SetUserInteraction(UserInteraction _userInteraction)
+        {
+            userInteraction = _userInteraction;
         }
 
         public void AddControl(Control control)
@@ -72,19 +79,19 @@ namespace ModpackUpdateManager
 
         private void btn_StartAuto_Click(object sender, EventArgs e)
         {
-            modOperationManager.StartAutoMode();
+            userInteraction.StartAutoMode();
             ModeChangeUserOutput();
         }
 
         private void btn_ManualStep_Click(object sender, EventArgs e)
         {
-            modOperationManager.ManualStep();
+            userInteraction.ManualStep();
             ModeChangeUserOutput();
         }
 
         private void btn_SkipMod_Click(object sender, EventArgs e)
         {
-            modOperationManager.SkipMod(Enums.ModCompletionStatus.Skipped, "Skipped Manually.");
+            userInteraction.SkipMod(Enums.ModCompletionStatus.Skipped, "Skipped Manually.");
         }
 
         private void btn_Back_Click(object sender, EventArgs e)
@@ -100,7 +107,7 @@ namespace ModpackUpdateManager
         private void btn_StopAuto_Click(object sender, EventArgs e)
         {
             SetOutputText("Stopping automatic mode...");
-            modOperationManager.Cancel();
+            userInteraction.Cancel();
             ModeChangeUserOutput();
         }
 
@@ -132,7 +139,7 @@ namespace ModpackUpdateManager
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            modOperationManager.Dispose();
+            userInteraction.Dispose();
         }
     }
 }

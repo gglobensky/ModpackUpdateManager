@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace ModpackUpdateManager.Managers
+namespace ModpackUpdateManager.Utils
 {
     public static class JsonFileHandler
     {

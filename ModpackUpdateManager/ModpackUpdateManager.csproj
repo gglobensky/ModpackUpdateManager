@@ -118,6 +118,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Core\LifeCycleManager.cs" />
+    <Compile Include="Components\Core\Miscellaneous.cs" />
     <Compile Include="Enums\ModCompletionStatus.cs" />
     <Compile Include="Enums\TaskResult.cs" />
     <Compile Include="Form1.cs">
@@ -132,16 +134,19 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Managers\AppSettings.cs" />
-    <Compile Include="Managers\Automation.cs" />
-    <Compile Include="Managers\BrowserManager.cs" />
-    <Compile Include="Managers\JsonFileHandler.cs" />
-    <Compile Include="Managers\LogFile.cs" />
-    <Compile Include="Managers\ModDataAccessor.cs" />
-    <Compile Include="Managers\ModOperationManager.cs" />
-    <Compile Include="Managers\PersistentVariables.cs" />
-    <Compile Include="Managers\UserMessaging.cs" />
-    <Compile Include="Managers\Utilities.cs" />
+    <Compile Include="Utils\AppSettings.cs" />
+    <Compile Include="Components\Core\Automation.cs" />
+    <Compile Include="Components\BrowserManager.cs" />
+    <Compile Include="Components\Core\CallbackManager.cs" />
+    <Compile Include="Components\InitContainer.cs" />
+    <Compile Include="Utils\JsonFileHandler.cs" />
+    <Compile Include="Utils\LogFile.cs" />
+    <Compile Include="Components\Core\ModDataAccessor.cs" />
+    <Compile Include="Components\Core\ModOperationManager.cs" />
+    <Compile Include="Utils\PersistentVariables.cs" />
+    <Compile Include="Components\Core\UserInteraction.cs" />
+    <Compile Include="Components\UserMessaging.cs" />
+    <Compile Include="Utils\Utilities.cs" />
     <Compile Include="Models\LogObject.cs" />
     <Compile Include="Models\ModData.cs" />
     <Compile Include="Models\ModDataApiResponse.cs" />

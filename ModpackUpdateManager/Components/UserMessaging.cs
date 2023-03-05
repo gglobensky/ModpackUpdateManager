@@ -1,4 +1,4 @@
-﻿namespace ModpackUpdateManager.Managers
+﻿namespace ModpackUpdateManager.Components
 {
     public class UserMessaging
     {

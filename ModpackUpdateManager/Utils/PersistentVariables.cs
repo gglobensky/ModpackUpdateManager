@@ -1,4 +1,4 @@
-﻿namespace ModpackUpdateManager.Managers
+﻿namespace ModpackUpdateManager.Utils
 {
     public static class PersistentVariables
     {

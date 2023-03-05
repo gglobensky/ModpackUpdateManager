@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ModpackUpdateManager.Managers
+namespace ModpackUpdateManager.Utils
 {
     public static class Utilities
     {

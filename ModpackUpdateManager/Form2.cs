@@ -1,4 +1,5 @@
-﻿using ModpackUpdateManager.Managers;
+﻿using ModpackUpdateManager.Components;
+using ModpackUpdateManager.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,78 +13,38 @@ namespace ModpackUpdateManager
     {
         private const string malformedDirectoryMessage = "{0} is malformed. Please select an existing directory.";
         private const string malformedDirectoriesMessage = "Source and output paths are malformed. Please select existing directories.";
-
-        private const string dataFolderPath = ".\\data";
-        private const string scriptFolderPath = ".\\scripts";
-
-        private const string getModSearchResultScriptPath = $"{scriptFolderPath}\\GetModSearchResults.js";
-
-        private const string gameVersionIdsJsonPath = $"{dataFolderPath}\\gameVersionIds.json";
-        private const string gameFlavorIdsJsonPath = $"{dataFolderPath}\\gameFlavorIds.json";
-        private const string searchTermBlacklistJsonPath = $"{dataFolderPath}\\searchTermBlacklist.json";
-
         private const string defaultOutputPath = $".\\output";
 
-        private Dictionary<string, string> gameVersionIds = new Dictionary<string, string>()
-        {
-            {"1.19.2", "9366"},
-            {"1.19"  , "9186"},
-            {"1.18.2", "9008"},
-            {"1.18.1", "8857"},
-            {"1.18"  , "8830"},
-            {"1.16.5", "8203"},
-            {"1.16.4", "8134"},
-            {"1.16.3", "8056"},
-            {"1.16.1", "7892"},
-            {"1.15.2", "7722"},
-            {"1.14.4", "7469"},
-            {"1.12.2", "6756"},
-            {"1.12.1", "6756"},
-            {"1.12"  , "6580"}
-        };
-        private Dictionary<string, string> gameFlavorIds = new Dictionary<string, string>()
-        {
-            {"Forge", "1" },
-            {"Fabric", "4" },
-            {"Quilt", "5" }
-        };
+        private Dictionary<string, string> gameVersionIds = new Dictionary<string, string>();
+        private Dictionary<string, string> gameFlavorIds = new Dictionary<string, string>();
 
-        private List<string> searchTermBlacklist = new List<string>(){
-            "edition",
-            "port",
-            "unofficial"
-        };
+        private Form1 form1;
 
-        private string getModSearchResultDefaultScript = @"
-            (function () {
-                let divElements = document.querySelectorAll('div.project-card');
-
-                let result = [];
-                let index = 0;
-
-                Array.from(divElements).forEach(element => {
-                    let a = element.getElementsByTagName('a')[0];
-                    let li = element.querySelector('li.detail-updated');
-                    let object = { value: a.innerText, url: a.href, updated: li.getElementsByTagName('span')[0].innerText };
-                    result[index++] = object;
-                });
-
-                return result;
-            })();
-            ";
+        private InitContainer initContainer;
 
         public Form2()
         {
             InitializeComponent();
-            CreateDataFolder();
-            CreateScriptFolder();
-            InitializeExternalData();
         }
 
-        private void Form2_Load(object sender, EventArgs e)
+        private async void Form2_Load(object sender, EventArgs e)
         {
+            initContainer = new InitContainer();
+            await initContainer.Initialize(this);
+
             combo_Version.DataSource = gameVersionIds.Select(element => element.Key).ToList<string>();
             combo_Api.DataSource = gameFlavorIds.Select(element => element.Key).ToList<string>();
+        }
+
+        public void SetDataSources(Dictionary<string, string> _gameVersionIds, Dictionary<string, string> _gameFlavorIds)
+        {
+            gameVersionIds = _gameVersionIds;
+            gameFlavorIds = _gameFlavorIds;
+        }
+
+        public void SetForm1(Form1 _form1)
+        {
+            form1 = _form1;
         }
 
         public void ChooseSourceFolder()
@@ -92,16 +53,6 @@ namespace ModpackUpdateManager
             {
                 txt_SourcePath.Text = folderBrowserDialog1.SelectedPath;
             }
-        }
-
-        private void CreateDataFolder()
-        {
-            DirectoryInfo di = Directory.CreateDirectory(dataFolderPath);
-        }
-
-        private void CreateScriptFolder()
-        {
-            DirectoryInfo di = Directory.CreateDirectory(scriptFolderPath);
         }
 
         private void btn_BrowseSource_Click(object sender, EventArgs e)
@@ -152,44 +103,11 @@ namespace ModpackUpdateManager
                 defaultOutputPath : txt_OutputPath.Text);
 
             this.Hide();
-            Form1 form1 = new Form1(getModSearchResultScriptPath, gameVersionIds, gameFlavorIds, searchTermBlacklist);
+
+            initContainer.CreateMainForm(this);
 
             form1.Closed += (s, args) => this.Close();
             form1.Show();
-        }
-        private void InitializeExternalData()
-        {
-            if (!File.Exists(gameVersionIdsJsonPath))
-            {
-                JsonFileHandler.SerializeJsonFile(gameVersionIdsJsonPath, gameVersionIds, false);
-            }
-            else
-            {
-                gameVersionIds = JsonFileHandler.DeserializeJsonFile<Dictionary<string, string>>(gameVersionIdsJsonPath);
-            }
-
-            if (!File.Exists(gameFlavorIdsJsonPath))
-            {
-                JsonFileHandler.SerializeJsonFile(gameFlavorIdsJsonPath, gameFlavorIds, false);
-            }
-            else
-            {
-                gameFlavorIds = JsonFileHandler.DeserializeJsonFile<Dictionary<string, string>>(gameFlavorIdsJsonPath);
-            }
-
-            if (!File.Exists(searchTermBlacklistJsonPath))
-            {
-                JsonFileHandler.SerializeJsonFile(searchTermBlacklistJsonPath, searchTermBlacklist, false);
-            }
-            else
-            {
-                searchTermBlacklist = JsonFileHandler.DeserializeJsonFile<List<string>>(searchTermBlacklistJsonPath);
-            }
-
-            if (!File.Exists(getModSearchResultScriptPath))
-            {
-                Utilities.FileWriteAsync(getModSearchResultScriptPath, getModSearchResultDefaultScript, false).Wait();
-            }
         }
     }
 }

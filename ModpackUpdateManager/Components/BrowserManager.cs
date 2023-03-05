@@ -1,12 +1,13 @@
 ﻿using CefSharp;
 using CefSharp.Handler;
 using CefSharp.WinForms;
+using ModpackUpdateManager.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace ModpackUpdateManager.Managers
+namespace ModpackUpdateManager.Components
 {
     public static class BrowserManager
     {
@@ -16,7 +17,7 @@ namespace ModpackUpdateManager.Managers
         private static Form1 MainForm;
 
         public delegate IResourceRequestHandler OnBeforeRequest(IRequest request);
-        public static void Initialize(string startingUrl, ModOperationManager _modOperationManager, Form1 _MainForm, Action<DownloadItem> _onDownloadUpdated, OnBeforeRequest _onBeforeRequest)
+        public static void Initialize(string startingUrl, Form1 _MainForm, Action<DownloadItem> _onDownloadUpdated, OnBeforeRequest _onBeforeRequest)
         {
             MainForm = _MainForm;
             Cef.Initialize(new CefSettings());
