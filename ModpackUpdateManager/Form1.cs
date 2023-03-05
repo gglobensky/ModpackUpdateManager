@@ -1,7 +1,6 @@
 ﻿using ModpackUpdateManager.Components;
 using ModpackUpdateManager.Utils;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using static ModpackUpdateManager.Components.Core;
 

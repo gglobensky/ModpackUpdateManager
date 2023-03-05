@@ -1,10 +1,6 @@
 ﻿using ModpackUpdateManager.Enums;
 using ModpackUpdateManager.Models;
 using ModpackUpdateManager.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ModpackUpdateManager.Components
@@ -19,7 +15,7 @@ namespace ModpackUpdateManager.Components
             private ModDataAccessor modDataAccessor;
             private Miscellaneous miscellaneous;
 
-            public LifeCycleManager(ModOperationManager _modOperationManager, Automation _automation, 
+            public LifeCycleManager(ModOperationManager _modOperationManager, Automation _automation,
                 UserMessaging _userMessaging, ModDataAccessor _modDataAccessor, Miscellaneous _miscellaneous)
             {
                 modOperationManager = _modOperationManager;
