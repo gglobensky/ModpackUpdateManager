@@ -21,7 +21,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="OutputModPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">.\</Value>
     </Setting>
     <Setting Name="SelectedVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

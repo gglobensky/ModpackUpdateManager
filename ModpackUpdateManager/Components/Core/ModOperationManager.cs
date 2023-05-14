@@ -121,7 +121,7 @@ namespace ModpackUpdateManager.Components
             private async Task<TaskResult> TryProcessMod()
             {
                 ModDataApiResponse modDataApiResponse = await GetModForTargetVersion();
-                string modFileName = modDataApiResponse.data.Count > 0 ? modDataApiResponse.data[0].fileName : "";
+                string modFileName = modDataApiResponse.data != null ? modDataApiResponse.data[0].fileName : "";
 
                 targetedModFileName = modFileName;
 
@@ -232,7 +232,7 @@ namespace ModpackUpdateManager.Components
                 }
 
                 //Load this url which triggers Network requests that divulge the modId
-                await BrowserManager.LoadUrl($"{baseModAddress}/files/all?page=1");
+                await BrowserManager.LoadUrl($"{baseModAddress}/files?pageIndex=0&pageSize=20&sort=dateCreated&sortDescending=true&removeAlphas=true");
 
                 if (PersistentVariables.GetIsTaskCancelled())
                 {

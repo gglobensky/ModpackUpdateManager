@@ -64,16 +64,20 @@
     <ManifestKeyFile>ModpackUpdateManager_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CefSharp, Version=109.1.110.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
@@ -169,8 +173,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="ModpackUpdateManager_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -187,7 +191,7 @@
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 et x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
