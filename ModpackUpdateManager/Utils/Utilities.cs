@@ -19,6 +19,8 @@ namespace ModpackUpdateManager.Utils
 
             try
             {
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
                 using (FileStream stream = new FileStream(filePath, append ? FileMode.Append : FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
                 using (StreamWriter sw = new StreamWriter(stream))
                 {
