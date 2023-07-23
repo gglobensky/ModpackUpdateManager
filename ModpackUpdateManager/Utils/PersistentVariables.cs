@@ -46,6 +46,17 @@
             Properties.Settings.Default.Save();
         }
 
+        public static bool GetIsTaskCompleted()
+        {
+            return Properties.Settings.Default.IsTaskCompleted;
+        }
+
+        public static void SetIsTaskCompleted(bool isTaskCompleted)
+        {
+            Properties.Settings.Default.IsTaskCompleted = isTaskCompleted;
+            Properties.Settings.Default.Save();
+        }
+
         public static bool GetIsInAutoMode()
         {
             return Properties.Settings.Default.IsInAutoMode;

@@ -154,5 +154,17 @@ namespace ModpackUpdateManager.Properties {
                 this["DownloadMods"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsTaskCompleted {
+            get {
+                return ((bool)(this["IsTaskCompleted"]));
+            }
+            set {
+                this["IsTaskCompleted"] = value;
+            }
+        }
     }
 }

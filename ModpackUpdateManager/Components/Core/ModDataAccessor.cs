@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Windows;
+using System.Windows.Forms;
 
 namespace ModpackUpdateManager.Components
 {
@@ -121,7 +123,7 @@ namespace ModpackUpdateManager.Components
 
                 return displayName;
             }
-            public HashSet<string> GetOutputDependencies(string json)
+            public HashSet<string> GetOutputDependencies(string json, string fileName)
             {
                 var dynamicObject = JsonConvert.DeserializeObject<dynamic>(json)!;
                 HashSet<string> dependencyModIds = new HashSet<string>();
@@ -130,16 +132,35 @@ namespace ModpackUpdateManager.Components
                 {
                     foreach (var dependency in dynamicObject.dependencies)
                     {
-                        foreach (var listing in dependency.Children()[0])
+
+
+                        foreach (var listing in dependency)
                         {
                             LogFile.LogMessage(JsonConvert.SerializeObject(listing));
-                            string modId = (string)listing.modId;
-                            if (modId != "minecraft" && modId != "forge")
+
+                            if (listing is Newtonsoft.Json.Linq.JArray)
                             {
-                                dependencyModIds.Add(modId);
+                                foreach (var element in listing)
+                                {
+                                    string modId = (string)element.modId;
+                                    if (modId != "minecraft" && modId != "forge")
+                                    {
+                                        dependencyModIds.Add(modId);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                string modId = (string)listing;
+                                if (modId != "minecraft" && modId != "forge")
+                                {
+                                    dependencyModIds.Add(modId);
+                                }
+
                             }
                         }
                     }
+                    
                 }
 
                 return dependencyModIds;
@@ -159,7 +180,7 @@ namespace ModpackUpdateManager.Components
                 {
                     foreach (string fileName in jarFiles)
                     {
-                        HashSet<string> outputDependencies = GetOutputDependencies(ReadJarModTomlFileContent(Path.Combine(modFolderPath, fileName)));
+                        HashSet<string> outputDependencies = GetOutputDependencies(ReadJarModTomlFileContent(Path.Combine(modFolderPath, fileName)), fileName);
                         dependencyModIds.Concat(outputDependencies);
                     }
                 }
@@ -170,6 +191,24 @@ namespace ModpackUpdateManager.Components
             public List<string> GetNonDesiredApis()
             {
                 return nonDesiredApis;
+            }
+
+            /// <summary>
+            /// Increments the index that goes through the mods source folder. Returns false if index is bigger than total.
+            /// </summary>
+            /// <returns></returns>
+            public bool IncrementModListIndex()
+            {
+                int dataIndex = PersistentVariables.GetCurrentModListIndex();
+
+                PersistentVariables.SetCurrentModListIndex(++dataIndex);
+
+                if (dataIndex >= GetSourceModQuantity())
+                {
+                    return false;
+                }
+
+                return true;
             }
 
             private void SkipExisting(Action onSkipExisting)

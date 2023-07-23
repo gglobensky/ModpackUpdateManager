@@ -27,18 +27,20 @@ namespace ModpackUpdateManager.Components
 
             public async Task ManageAutoModeLifecycle()
             {
-                await miscellaneous.LoadSearchUrl();
+                TaskResult result = TaskResult.Failure;
 
                 do
                 {
-                    if (!PersistentVariables.GetIsInAutoMode() || PersistentVariables.GetIsTaskCancelled())
-                        return;
+                    if (!PersistentVariables.GetIsInAutoMode() || PersistentVariables.GetIsTaskCancelled() || PersistentVariables.GetIsTaskCompleted())
+                        continue;
 
-                    ModSearchResult modSearchResult = await automation.TrySelectTargetModFromSearchList();
+                    await miscellaneous.LoadSearchUrl();
+
+                    ModSearchResult modSearchResult = await automation.AutoSelectMod();
 
                     if (modSearchResult == null)
                     {
-                        await modOperationManager.SkipMod(ModCompletionStatus.Failure, "Search yielded no valid results, could not automatically download.");
+                        modOperationManager.SkipMod(ModCompletionStatus.Failure, "Search yielded no valid results, could not automatically download.");
                         continue;
                     }
 
@@ -47,11 +49,16 @@ namespace ModpackUpdateManager.Components
                     if (!PersistentVariables.GetIsInAutoMode() || PersistentVariables.GetIsTaskCancelled())
                         return;
 
-                    TaskResult result = await modOperationManager.TryProcessModForTargetedVersion();
+                    result = await modOperationManager.DownloadAndValidate();
 
                     if (result == TaskResult.Cancelled)
                     {
                         return;
+                    }
+                    else if (result == TaskResult.Completed)
+                    {
+                        PersistentVariables.SetIsTaskCompleted(true);
+                        continue;
                     }
                     else if (result == TaskResult.Failure)
                     {
@@ -63,22 +70,39 @@ namespace ModpackUpdateManager.Components
                         break;
                     }
 
-                    await miscellaneous.LoadSearchUrl();
+                } while ((PersistentVariables.GetIsInAutoMode() && !PersistentVariables.GetIsTaskCancelled()) && !PersistentVariables.GetIsTaskCompleted());
 
-                } while (PersistentVariables.GetIsInAutoMode() && !PersistentVariables.GetIsTaskCancelled());
+                if (PersistentVariables.GetIsTaskCompleted())
+                {
+                    userMessaging.ShowMessage("Automatic modpack update successfully completed.");
+                    modOperationManager.FinalizeUpdateProcess();
+                }
 
-                PersistentVariables.SetIsInAutoMode(false);
+                userMessaging.ShowMessage("Stopping automatic mode...");
+
             }
 
             public async Task ManageManualModeLifecycle()
             {
                 if (miscellaneous.IsOnModMainPage())
                 {
-                    await modOperationManager.TryProcessModForTargetedVersion();
+                    TaskResult result = await modOperationManager.DownloadAndValidate();
+
+                    if (result == TaskResult.Completed)
+                    {
+                        userMessaging.ShowMessage("Manual modpack update successfully completed.");
+                        PersistentVariables.SetIsTaskCompleted(true);
+                        modOperationManager.FinalizeUpdateProcess();
+                    }
                 }
 
-                await miscellaneous.LoadSearchUrl();
+
+                if (!PersistentVariables.GetIsTaskCompleted())
+                {
+                    await miscellaneous.LoadSearchUrl();
+                }
             }
+
         }
     }
 }

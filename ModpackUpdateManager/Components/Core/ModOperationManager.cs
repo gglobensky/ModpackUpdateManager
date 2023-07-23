@@ -73,36 +73,38 @@ namespace ModpackUpdateManager.Components
                 await lifeCycleManager.ManageAutoModeLifecycle();
             }
 
-            public void InitializeOperations(Form1 form1)
+            public bool InitializeOperations(Form1 form1)
             {
+                PersistentVariables.SetIsTaskCompleted(false);
                 ModData ModData = modDataAccessor.GetCurrentlyProcessedModData();
 
                 if (ModData == null)
                 {
                     System.Windows.Forms.MessageBox.Show($"No mods found in {PersistentVariables.GetSourceModPath()}. Exiting...");
-                    form1.Close();
-                    return;
+                    return false;
                 }
 
                 SearchUrl = Utilities.BuildCurseForgeSearchUrl(ModData.searchableName);
                 BrowserManager.Initialize(SearchUrl, form1, callbackManager.OnDownloadUpdated, callbackManager.ParseDataFromRequestUrl);
 
                 miscellaneous.ShowSearchingUserMessage();
+
+                return true;
             }
 
-            public async Task SkipMod(ModCompletionStatus status, string reason)
+            public TaskResult SkipMod(ModCompletionStatus status, string reason)
             {
                 string modName = modDataAccessor.GetCurrentlyProcessedModData().displayName;
                 userMessaging.ShowMessage($"Skipping mod {modName}...");
 
                 miscellaneous.ManageReport(status, modName, reason);
 
-                if (!TryGetNextModInList())
+                if (!modDataAccessor.IncrementModListIndex())
                 {
-                    FinalizeUpdateProcess();
+                    return TaskResult.Completed;
                 }
 
-                await miscellaneous.LoadSearchUrl();
+                return TaskResult.Success;
             }
 
             public async Task LoadSearchUrl()
@@ -118,17 +120,22 @@ namespace ModpackUpdateManager.Components
             #region Private Methods
 
             //Look into releaseType. 1 is for release. 2 for beta, maybe 3 for alpha?
-            private async Task<TaskResult> TryProcessMod()
+            /// <summary>
+            /// Checks the download page to find and download the latest version corresponding to the one searched. 
+            /// </summary>
+            /// <returns>Downloads if found, else returns Failure.</returns>
+            private async Task<TaskResult> DownloadIfRightVersionFound()
             {
                 ModDataApiResponse modDataApiResponse = await GetModForTargetVersion();
-                string modFileName = modDataApiResponse.data != null ? modDataApiResponse.data[0].fileName : "";
-
-                targetedModFileName = modFileName;
 
                 if (PersistentVariables.GetIsTaskCancelled())
                 {
                     return TaskResult.Cancelled;
                 }
+
+                string modFileName = modDataApiResponse.data != null ? modDataApiResponse.data[0].fileName : "";
+
+                targetedModFileName = modFileName;
 
                 if (String.IsNullOrEmpty(targetedModFileName))
                 {
@@ -158,22 +165,26 @@ namespace ModpackUpdateManager.Components
                 downloadedFileName = _downloadedFileName;
             }
 
-            public async Task<TaskResult> TryProcessModForTargetedVersion()
+            public async Task<TaskResult> DownloadAndValidate()
             {
-                TaskResult hasProcessedMod = await TryProcessMod();
+                TaskResult hasProcessedMod = await DownloadIfRightVersionFound();
 
                 if (hasProcessedMod == TaskResult.Failure)
                 {
                     string message = "Could not find corresponding file for the target Minecraft version";
+                    TaskResult result = SkipMod(ModCompletionStatus.Failure, message);
 
-                    await SkipMod(ModCompletionStatus.Failure, message);
-                    return TaskResult.Failure;
+                    // If when skipped, we processed the last item, its completed, else it reports the failure to find a link for the required version
+                    return result == TaskResult.Completed? result : TaskResult.Failure;
                 }
                 else if (hasProcessedMod == TaskResult.Cancelled)
+                {
                     return TaskResult.Cancelled;
+                }
 
                 string modName = modDataAccessor.GetCurrentlyProcessedModData().displayName;
 
+                // If user chose to download the mods via the checkbox
                 if (PersistentVariables.GetDownloadMods())
                 {
                     string fileName = await GetDownloadedFileName();
@@ -195,26 +206,32 @@ namespace ModpackUpdateManager.Components
                     miscellaneous.ManageReport(ModCompletionStatus.Success, modName, "Successfully found mod for target version.");
                 }
 
-                if (!TryGetNextModInList())
+                if (!modDataAccessor.IncrementModListIndex())
                 {
-                    FinalizeUpdateProcess();
+                    return TaskResult.Completed;
                 }
 
                 return TaskResult.Success;
             }
-
-            private bool TryGetNextModInList()
+            public void FinalizeUpdateProcess()
             {
-                int dataIndex = PersistentVariables.GetCurrentModListIndex();
+                HashSet<string> requiredDependencies = modDataAccessor.GetAllOutputDependencies();
 
-                PersistentVariables.SetCurrentModListIndex(++dataIndex);
-
-                if (dataIndex >= modDataAccessor.GetSourceModQuantity())
+                if (requiredDependencies != null)
                 {
-                    return false;
+                    foreach (string dependency in requiredDependencies)
+                    {
+                        userMessaging.ShowMessage($"Dependency {dependency} required for modpack, please confirm presence manually.");
+                    }
+
+                    JsonFileHandler.SerializeJsonFile<HashSet<string>>(dependenciesModPath, requiredDependencies, false);
                 }
 
-                return true;
+                userMessaging.ShowMessageBox("Modpack update process completed, please verify log files in output folder.\nThe program will Exit.", "Operation Successfully Completed");
+
+                PersistentVariables.SetIsTaskCancelled(false);
+                PersistentVariables.SetIsInAutoMode(false);  
+
             }
 
             private async Task<ModDataApiResponse> GetModForTargetVersion()
@@ -295,23 +312,6 @@ namespace ModpackUpdateManager.Components
                 }
 
                 return true;
-            }
-
-            private void FinalizeUpdateProcess()
-            {
-                HashSet<string> requiredDependencies = modDataAccessor.GetAllOutputDependencies();
-
-                if (requiredDependencies != null)
-                {
-                    foreach (string dependency in requiredDependencies)
-                    {
-                        userMessaging.ShowMessage($"Dependency {dependency} required for modpack, please confirm presence manually.");
-                    }
-
-                    JsonFileHandler.SerializeJsonFile<HashSet<string>>(dependenciesModPath, requiredDependencies, false);
-                }
-
-                userMessaging.ShowMessageBox("Modpack update process completed, please verify log files in output folder.", "Operation Successfully Completed");
             }
 
             #endregion

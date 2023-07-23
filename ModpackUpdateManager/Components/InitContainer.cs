@@ -87,7 +87,7 @@ namespace ModpackUpdateManager.Components
             form2.SetDataSources(gameVersionIds, gameFlavorIds);
         }
 
-        public void CreateMainForm(Form2 form2)
+        public bool CreateMainForm(Form2 form2)
         {
             Form1 form1 = new Form1();
 
@@ -96,7 +96,7 @@ namespace ModpackUpdateManager.Components
 
             form1.SetUserInteraction(userInteraction);
             form2.SetForm1(form1);
-            userInteraction.InitializeOperations(form1);
+            return userInteraction.InitializeOperations(form1);
         }
 
         private async Task InitializeOutputFiles()

@@ -104,10 +104,15 @@ namespace ModpackUpdateManager
 
             this.Hide();
 
-            initContainer.CreateMainForm(this);
-
-            form1.Closed += (s, args) => this.Close();
-            form1.Show();
+            if (!initContainer.CreateMainForm(this))
+            {
+                form1.Close();
+            }
+            else
+            {
+                form1.Closed += (s, args) => this.Close();
+                form1.Show();
+            }
         }
     }
 }

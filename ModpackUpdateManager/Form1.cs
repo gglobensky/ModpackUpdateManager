@@ -76,21 +76,36 @@ namespace ModpackUpdateManager
             txt_URL.Enabled = isEnabled;
         }
 
-        private void btn_StartAuto_Click(object sender, EventArgs e)
+        private async void btn_StartAuto_Click(object sender, EventArgs e)
         {
-            userInteraction.StartAutoMode();
+            await userInteraction.StartAutoMode();
             ModeChangeUserOutput();
+
+            if (PersistentVariables.GetIsTaskCompleted())
+            {
+                this.Close();
+            }
         }
 
-        private void btn_ManualStep_Click(object sender, EventArgs e)
+        private async void btn_ManualStep_Click(object sender, EventArgs e)
         {
-            userInteraction.ManualStep();
+            await userInteraction.ManualStep();
             ModeChangeUserOutput();
+
+            if (PersistentVariables.GetIsTaskCompleted())
+            {
+                this.Close();
+            }
         }
 
         private void btn_SkipMod_Click(object sender, EventArgs e)
         {
             userInteraction.SkipMod(Enums.ModCompletionStatus.Skipped, "Skipped Manually.");
+
+            if (PersistentVariables.GetIsTaskCompleted())
+            {
+                this.Close();
+            }
         }
 
         private void btn_Back_Click(object sender, EventArgs e)

@@ -27,17 +27,17 @@ namespace ModpackUpdateManager.Components
 
             #region Public Methods
 
-            public void InitializeOperations(Form1 form1)
+            public bool InitializeOperations(Form1 form1)
             {
-                modOperationManager.InitializeOperations(form1);
+                return modOperationManager.InitializeOperations(form1);
             }
 
-            public async Task SkipMod(ModCompletionStatus status, string reason)
+            public void SkipMod(ModCompletionStatus status, string reason)
             {
-                await modOperationManager.SkipMod(status, reason);
+                modOperationManager.SkipMod(status, reason);
             }
 
-            public async void ManualStep()
+            public async Task ManualStep()
             {
                 if (!isProcessing)
                 {
@@ -63,12 +63,17 @@ namespace ModpackUpdateManager.Components
                     // Give time for other tasks to close in the worst case scenario
                     await Task.Delay(2100);
                     PersistentVariables.SetIsTaskCancelled(false);
-                    await modOperationManager.LoadSearchUrl();
                     isStopping = false;
+
+                    if (!PersistentVariables.GetIsTaskCompleted())
+                    {
+                        await modOperationManager.LoadSearchUrl();
+                    }
+                    
                 }
             }
 
-            public async void StartAutoMode()
+            public async Task StartAutoMode()
             {
                 if (!isProcessing)
                 {

@@ -25,10 +25,19 @@ namespace ModpackUpdateManager.Components
                 nonDesiredApis = _nonDesiredApis;
                 getModSearchResultScript = Utilities.ReadFile(getModSearchResultFullPath);
             }
-
-            public async Task<ModSearchResult> TrySelectTargetModFromSearchList()
+            /// <summary>
+            /// Gets the ModSearchResult that matches the most with the mod name
+            /// </summary>
+            /// <returns>ModSearchResult that corresponds to the mod name from mods.toml</returns>
+            public async Task<ModSearchResult> AutoSelectMod()
             {
-                string searchableName = modDataAccessor.GetCurrentlyProcessedModData().searchableName;
+                ModData modData = modDataAccessor.GetCurrentlyProcessedModData();
+                if (modData == null)
+                {
+                    return null;
+                }
+
+                string searchableName = modData.searchableName;
                 LogFile.LogMessage($"searchableName: {searchableName}");
 
                 ModSearchResult modSearchResult = await GetAutoSelectedMod(searchableName);
