@@ -81,6 +81,11 @@ namespace ModpackUpdateManager.Components
                         LogFile.LogMessage($"Error, no mod displayName was found in mods.toml for file {fileName}");
                     }
                 }
+                else
+                {
+                    //MAYBE No mods.toml file at all
+                    ModData = new ModData("", "", "", "", "");
+                }
 
                 return ModData;
             }

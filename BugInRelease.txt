@@ -1,0 +1,153 @@
+See the end of this message for details on invoking 
+just-in-time (JIT) debugging instead of this dialog box.
+
+************** Exception Text **************
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at ModpackUpdateManager.Components.Core.Miscellaneous.IsDownloadedModDisplayNameMatchingSource(String sourceFileName, String targetFileName) in C:\Users\Guillaume Globensky\source\repos\ModpackUpdateManager\ModpackUpdateManager\ModpackUpdateManager\Components\Core\Miscellaneous.cs:line 55
+   at ModpackUpdateManager.Components.Core.ModOperationManager.ValidateDownloadedMod(String fileName) in C:\Users\Guillaume Globensky\source\repos\ModpackUpdateManager\ModpackUpdateManager\ModpackUpdateManager\Components\Core\ModOperationManager.cs:line 298
+   at ModpackUpdateManager.Components.Core.ModOperationManager.<DownloadAndValidate>d__24.MoveNext() in C:\Users\Guillaume Globensky\source\repos\ModpackUpdateManager\ModpackUpdateManager\ModpackUpdateManager\Components\Core\ModOperationManager.cs:line 192
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ModpackUpdateManager.Components.Core.LifeCycleManager.<ManageAutoModeLifecycle>d__6.MoveNext() in C:\Users\Guillaume Globensky\source\repos\ModpackUpdateManager\ModpackUpdateManager\ModpackUpdateManager\Components\Core\LifeCycleManager.cs:line 52
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ModpackUpdateManager.Components.Core.ModOperationManager.<StartAutoMode>d__17.MoveNext() in C:\Users\Guillaume Globensky\source\repos\ModpackUpdateManager\ModpackUpdateManager\ModpackUpdateManager\Components\Core\ModOperationManager.cs:line 73
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ModpackUpdateManager.Components.Core.UserInteraction.<StartAutoMode>d__9.MoveNext() in C:\Users\Guillaume Globensky\source\repos\ModpackUpdateManager\ModpackUpdateManager\ModpackUpdateManager\Components\Core\UserInteraction.cs:line 85
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at ModpackUpdateManager.Form1.<btn_StartAuto_Click>d__9.MoveNext() in C:\Users\Guillaume Globensky\source\repos\ModpackUpdateManager\ModpackUpdateManager\ModpackUpdateManager\Form1.cs:line 81
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.<>c.<ThrowAsync>b__6_0(Object state)
+
+
+************** Loaded Assemblies **************
+mscorlib
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9181.0 built by: NET481REL1LAST_C
+    CodeBase: file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/mscorlib.dll
+----------------------------------------
+ModpackUpdateManager
+    Assembly Version: 1.0.0.0
+    Win32 Version: 1.0.0.0
+    CodeBase: file:///C:/Users/Guillaume%20Globensky/source/repos/ModpackUpdateManager/ModpackUpdateManager/ModpackUpdateManager/bin/Release/ModpackUpdateManager.exe
+----------------------------------------
+System.Windows.Forms
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9181.0 built by: NET481REL1LAST_C
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Windows.Forms/v4.0_4.0.0.0__b77a5c561934e089/System.Windows.Forms.dll
+----------------------------------------
+System
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9172.0 built by: NET481REL1LAST_C
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System/v4.0_4.0.0.0__b77a5c561934e089/System.dll
+----------------------------------------
+System.Drawing
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9037.0 built by: NET481REL1
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Drawing/v4.0_4.0.0.0__b03f5f7f11d50a3a/System.Drawing.dll
+----------------------------------------
+System.Configuration
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9037.0 built by: NET481REL1
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Configuration/v4.0_4.0.0.0__b03f5f7f11d50a3a/System.Configuration.dll
+----------------------------------------
+System.Core
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9181.0 built by: NET481REL1LAST_C
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Core/v4.0_4.0.0.0__b77a5c561934e089/System.Core.dll
+----------------------------------------
+System.Xml
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9037.0 built by: NET481REL1
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Xml/v4.0_4.0.0.0__b77a5c561934e089/System.Xml.dll
+----------------------------------------
+Newtonsoft.Json
+    Assembly Version: 13.0.0.0
+    Win32 Version: 13.0.2.27524
+    CodeBase: file:///C:/Users/Guillaume%20Globensky/source/repos/ModpackUpdateManager/ModpackUpdateManager/ModpackUpdateManager/bin/Release/Newtonsoft.Json.DLL
+----------------------------------------
+System.Numerics
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9037.0 built by: NET481REL1
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
+----------------------------------------
+System.Runtime.Serialization
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9037.0 built by: NET481REL1
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Runtime.Serialization/v4.0_4.0.0.0__b77a5c561934e089/System.Runtime.Serialization.dll
+----------------------------------------
+System.Data
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9166.0 built by: NET481REL1LAST_B
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_32/System.Data/v4.0_4.0.0.0__b77a5c561934e089/System.Data.dll
+----------------------------------------
+System.IO.Compression.FileSystem
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9037.0
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.IO.Compression.FileSystem/v4.0_4.0.0.0__b77a5c561934e089/System.IO.Compression.FileSystem.dll
+----------------------------------------
+System.IO.Compression
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9037.0 built by: NET481REL1
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.IO.Compression/v4.0_4.0.0.0__b77a5c561934e089/System.IO.Compression.dll
+----------------------------------------
+Tomlyn
+    Assembly Version: 0.16.0.0
+    Win32 Version: 0.16.2.0
+    CodeBase: file:///C:/Users/Guillaume%20Globensky/source/repos/ModpackUpdateManager/ModpackUpdateManager/ModpackUpdateManager/bin/Release/Tomlyn.DLL
+----------------------------------------
+netstandard
+    Assembly Version: 2.0.0.0
+    Win32 Version: 4.8.9037.0
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/netstandard/v4.0_2.0.0.0__cc7b13ffcd2ddd51/netstandard.dll
+----------------------------------------
+CefSharp
+    Assembly Version: 109.1.110.0
+    Win32 Version: 109.1.110.0
+    CodeBase: file:///C:/Users/Guillaume%20Globensky/source/repos/ModpackUpdateManager/ModpackUpdateManager/ModpackUpdateManager/bin/Release/CefSharp.DLL
+----------------------------------------
+System.Web
+    Assembly Version: 4.0.0.0
+    Win32 Version: 4.8.9181.0 built by: NET481REL1LAST_C
+    CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_32/System.Web/v4.0_4.0.0.0__b03f5f7f11d50a3a/System.Web.dll
+----------------------------------------
+CefSharp.WinForms
+    Assembly Version: 109.1.110.0
+    Win32 Version: 109.1.110.0
+    CodeBase: file:///C:/Users/Guillaume%20Globensky/source/repos/ModpackUpdateManager/ModpackUpdateManager/ModpackUpdateManager/bin/Release/CefSharp.WinForms.DLL
+----------------------------------------
+CefSharp.Core
+    Assembly Version: 109.1.110.0
+    Win32 Version: 109.1.110.0
+    CodeBase: file:///C:/Users/Guillaume%20Globensky/source/repos/ModpackUpdateManager/ModpackUpdateManager/ModpackUpdateManager/bin/Release/CefSharp.Core.DLL
+----------------------------------------
+CefSharp.Core.Runtime
+    Assembly Version: 109.1.110.0
+    Win32 Version: 109.1.110
+    CodeBase: file:///C:/Users/Guillaume%20Globensky/source/repos/ModpackUpdateManager/ModpackUpdateManager/ModpackUpdateManager/bin/Release/CefSharp.Core.Runtime.DLL
+----------------------------------------
+
+************** JIT Debugging **************
+To enable just-in-time (JIT) debugging, the .config file for this
+application or computer (machine.config) must have the
+jitDebugging value set in the system.windows.forms section.
+The application must also be compiled with debugging
+enabled.
+
+For example:
+
+<configuration>
+    <system.windows.forms jitDebugging="true" />
+</configuration>
+
+When JIT debugging is enabled, any unhandled exception
+will be sent to the JIT debugger registered on the computer
+rather than be handled by this dialog box.
+
+
