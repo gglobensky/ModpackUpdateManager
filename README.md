@@ -29,9 +29,6 @@ The tool is not 100% perfect in automatic mode, but it seems to find about 95% o
 
 Overall, ModpackUpdateManager is a useful tool that can save you a lot of time and effort when updating your Minecraft modpack. Give it a try and see how it works for you!
 
-
-This text has been reformatted to be more concise by ChatGPT!
-
 Here is a quick video demonstration:
 
 https://youtu.be/-xtx3QRALtg
