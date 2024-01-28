@@ -32,6 +32,8 @@ namespace ModpackUpdateManager.Components
 
         private Dictionary<string, string> gameVersionIds = new Dictionary<string, string>()
         {
+          {"1.20.4", "10407"},
+          {"1.20.3", "10395"},
           {"1.20.2", "10236"},
           {"1.20.1", "9990"},
           {"1.19.2", "9366"},
