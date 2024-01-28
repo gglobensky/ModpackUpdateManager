@@ -72,7 +72,7 @@ namespace ModpackUpdateManager.Components
                 let index = 0;
 
                 Array.from(divElements).forEach(element => {
-                    let a = element.getElementsByTagName('a')[0];
+                    let a = element.getElementsByTagName('a')[1];
                     let li = element.querySelector('li.detail-updated');
                     let object = { value: a.innerText, url: a.href, updated: li.getElementsByTagName('span')[0].innerText };
                     result[index++] = object;
