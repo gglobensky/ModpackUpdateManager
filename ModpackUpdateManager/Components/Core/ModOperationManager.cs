@@ -133,7 +133,7 @@ namespace ModpackUpdateManager.Components
                     return TaskResult.Cancelled;
                 }
 
-                string modFileName = modDataApiResponse.data != null ? modDataApiResponse.data[0].fileName : "";
+                string modFileName = modDataApiResponse.data != null && modDataApiResponse.data.Count > 0 ? modDataApiResponse.data[0].fileName : "";
 
                 targetedModFileName = modFileName;
 
