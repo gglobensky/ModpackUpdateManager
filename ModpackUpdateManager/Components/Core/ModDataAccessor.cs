@@ -56,7 +56,9 @@ namespace ModpackUpdateManager.Components
                     }
                 }
 
-                return ModFileDatum;
+                List<ModData> invalidModData = ModFileDatum.Where(modFileData => modFileData.searchableName == "").ToList();
+
+                return ModFileDatum.Except(invalidModData).ToList();
             }
 
             public ModData GetModData(string path, string fileName)

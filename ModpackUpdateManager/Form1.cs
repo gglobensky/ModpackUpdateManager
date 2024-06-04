@@ -125,11 +125,11 @@ namespace ModpackUpdateManager
             ModeChangeUserOutput();
         }
 
-        private void txt_URL_KeyDown(object sender, KeyEventArgs e)
+        private async void txt_URL_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                BrowserManager.LoadUrl(txt_URL.Text);
+                await BrowserManager.LoadUrl(txt_URL.Text);
                 e.Handled = true;
                 e.SuppressKeyPress = true;
             }

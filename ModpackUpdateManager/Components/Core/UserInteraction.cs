@@ -1,7 +1,9 @@
 ﻿using ModpackUpdateManager.Enums;
 using ModpackUpdateManager.Utils;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ModpackUpdateManager.Components
 {
@@ -22,14 +24,15 @@ namespace ModpackUpdateManager.Components
 
                 modOperationManager = new ModOperationManager(_reportModPath, getModSearchResultScriptPath,
                     _invalidDownloadsFolderName, _dependenciesModPath, gameVersionIds, gameFlavorIds, searchTermBlacklist, userMessaging);
-
             }
 
             #region Public Methods
 
             public bool InitializeOperations(Form1 form1)
             {
-                return modOperationManager.InitializeOperations(form1);
+                bool foundSourceMods = modOperationManager.InitializeOperations(form1);
+
+                return foundSourceMods;
             }
 
             public void SkipMod(ModCompletionStatus status, string reason)

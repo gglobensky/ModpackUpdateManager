@@ -102,14 +102,10 @@ namespace ModpackUpdateManager
             PersistentVariables.SetOutputModPath(String.IsNullOrEmpty(txt_OutputPath.Text) ?
                 defaultOutputPath : txt_OutputPath.Text);
 
-            this.Hide();
 
-            if (!initContainer.CreateMainForm(this))
+            if (initContainer.CreateMainForm(this))
             {
-                form1.Close();
-            }
-            else
-            {
+                this.Hide();
                 form1.Closed += (s, args) => this.Close();
                 form1.Show();
             }

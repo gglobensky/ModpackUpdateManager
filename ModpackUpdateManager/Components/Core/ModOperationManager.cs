@@ -80,7 +80,7 @@ namespace ModpackUpdateManager.Components
 
                 if (ModData == null)
                 {
-                    System.Windows.Forms.MessageBox.Show($"No mods found in {PersistentVariables.GetSourceModPath()}. Exiting...");
+                    System.Windows.Forms.MessageBox.Show($"No mods found in {PersistentVariables.GetSourceModPath()}.\nPlease select a folder containing valid mod.jar files.");
                     return false;
                 }
 
