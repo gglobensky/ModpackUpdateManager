@@ -1,3 +1,8 @@
+Note to everyone:
+I also made a Modrinth compatible version, and it is much faster.
+
+https://github.com/gglobensky/ModpackUpdateManagerNodeJS/tree/1.0.0
+
 ModpackUpdateManager - Automatic Modpack Updater for Minecraft
 
 ModpackUpdateManager is a program designed to simplify the process of updating Minecraft modpacks. If you have a personal Minecraft modpack that you play on, you know how time-consuming it can be to update it from one version to another. ModpackUpdateManager is here to help.
